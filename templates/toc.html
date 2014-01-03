@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block head %}
+   {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+<h1>Table of Contents</h1>
+<p>This page contains links to all my fantasy statistics</p>
+<ul>
+   {% for item in pages %}
+   <li><a href="{{ item.href }}">{{ item.title }}</a></li>
+   {% endfor %}
+   <li><a href="{{ chartsUrl }}">Charts</a></li>
+</ul>
+{% endblock %}

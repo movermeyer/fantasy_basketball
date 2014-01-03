@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %} {{ title }} {% endblock %} 
+{% block head %}
+   {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+      <!-- inherited template -->
+      {% for f in figs  %}
+         <img src="{{ f.fileName }}"/>
+         <br>
+         <br>
+      {% endfor %}
+
+{% endblock %}
+
+

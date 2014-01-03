@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <title>{% block title %}Fantasy Stats{% endblock %}</title>
+
+      <link href="static/css/reset.css" media="screen" rel="stylesheet" type="text/css" />
+      <link href="static/css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+      <link href="static/css/jquery.dynatable.css" media="screen" rel="stylesheet" type="text/css" />
+      <link href="static/css/dynatable-docs.css" media="screen" rel="stylesheet" type="text/css" />
+      <link href="static/css/bootstrap-2.3.2.min.css" media="screen" rel="stylesheet" type="text/css" />
+      <link href="static/css/application.css" media="screen" rel="stylesheet" type="text/css" />
+      <link href="static/css/project.css" media="screen" rel="stylesheet" type="text/css" />
+      <link href="static/css/pygments.css" media="screen" rel="stylesheet" type="text/css" />
+      <link href="static/css/share.css" media="screen" rel="stylesheet" type="text/css" />
+      <link href='static/css/Nunito.css' media="screen" rel="stylesheet" type="text/css" />
+      <link href="static/css/OpenSans.css" media="screen" rel="stylesheet" type="text/css" />
+
+      <script type="text/javascript" charset="utf-8" src="static/js/jquery.js"></script>
+      <script type="text/javascript" charset="utf-8" src="static/js/jquery.dynatable.js"></script>
+
+   </head>
+   <body>
+      <div id="content">
+         {% block content %}{% endblock %}
+      </div>
+   </body>
+</html>

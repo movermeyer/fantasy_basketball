@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %} {{ title }} {% endblock %} 
+{% block head %}
+   {{ super() }}
+{% endblock %}
+
+{% block content %}
+   <div class="dynatable-demo">
+
+      {{ fantasy_table }}
+
+      <script type="text/javascript" charset="utf-8">
+         $('#{{ fantasy_id }}').dynatable( {
+            features: {
+               paginate: true,
+               search: true,
+               recordCount: false
+            },
+            readers: {
+               'naiveValue': function(el, record) {
+                  return Number(el.innerHTML.replace(/,/g, ''))},
+               'normalizedValue': function(el, record) {
+                  return Number(el.innerHTML.replace(/,/g, ''));
+               }
+            },
+            writers: {
+               'naiveValue': function(record) {
+                  return record.naiveValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")},
+               'normalizedValue': function(record) {
+                  return record.normalizedValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+               }
+            }
+         });
+         </script>
+   </div>
+
+{% endblock %}
