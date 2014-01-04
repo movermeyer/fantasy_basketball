@@ -123,15 +123,12 @@ class RawStats(object):
       self.data.to_csv(self.csvName)  # , cols=self.columns)  # FIXME -- do we need cols=self.coloumns
 
    def downloadHTML(self):
-      #self.buf = cStringIO.StringIO()
-      #c = pycurl.Curl()
-      #c.setopt(c.URL, self.url)
-      #c.setopt(c.WRITEFUNCTION, self.buf.write)
-      #c.perform()
+      self.buf = cStringIO.StringIO()
+      c = pycurl.Curl()
+      c.setopt(c.URL, self.url)
+      c.setopt(c.WRITEFUNCTION, self.buf.write)
+      c.perform()
 
-      b = open('NBA_2014_totals.html')
-      self.buf = cStringIO.StringIO(b.read())
-      b.close()
 
    def processHTML(self):
       """ Finds the table in the downloaded HTML and converts it into a CSV """
@@ -286,11 +283,7 @@ class Stats(object):
       expr3 = re.compile(r"<tr>.*FTeam.*</thead>",  re.MULTILINE | re.DOTALL)
       for p in pages:
          fantasyID = p['fantasyID']
-         try:
-            htmlText = p['obj'].to_html(columns=p['cols'], classes=["table", "table-bordered"])
-         except:
-            import ipdb
-            ipdb.set_trace()  # XXX BREAKPOINT
+         htmlText = p['obj'].to_html(columns=p['cols'], classes=["table", "table-bordered"])
 
          if fantasyID == 'pb-mean':
             expr = expr2
