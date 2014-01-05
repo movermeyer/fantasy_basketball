@@ -129,7 +129,6 @@ class RawStats(object):
       c.setopt(c.WRITEFUNCTION, self.buf.write)
       c.perform()
 
-
    def processHTML(self):
       """ Finds the table in the downloaded HTML and converts it into a CSV """
 
@@ -310,15 +309,16 @@ class Stats(object):
          with open(os.path.join(self.filesPath, p['href']), 'w') as fd:
             text = template.render(title=p['title'],
                                    fantasy_table=htmlText,
-                                   fantasy_id=fantasyID)
+                                   fantasy_id=fantasyID,
+                                   allPages=pages)
             fd.write(text)
 
          with open(os.path.join(self.filesPath, 'charts.html'), 'w') as fd:
-            text = chartsTemplate.render(title='Charts', figs=self.figures)
+            text = chartsTemplate.render(title='Charts', figs=self.figures, allPages=pages)
             fd.write(text)
 
          with open(os.path.join(self.filesPath, 'toc.html'), 'w') as fd:
-            text = tocTemplate.render(title='Table of Contents', pages=pages, chartsUrl='charts.html')
+            text = tocTemplate.render(title='Table of Contents', pages=pages, chartsUrl='charts.html', allPages=pages)
             fd.write(text)
 
 

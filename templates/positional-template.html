@@ -1,6 +1,4 @@
-
 {% extends "base.html" %}
-{% block title %}{{ title }}{% endblock %}
 {% block head %}
    {{ super() }}
 {% endblock %}
@@ -8,32 +6,34 @@
 {% block content %}
       <!-- pos template -->
       {% for k, v in fantasy_table.iteritems() %}
-         {{ v }}
+         <div class="row top-buffer">
+            <div class="col-lg-12">
+               {{ v }}
+            </div>
+         </div>
       {% endfor %}
 
 
       {% for k, v in fantasy_table.iteritems() %}
-         <div class="dynatable-demo">
-            <script type="text/javascript" charset="utf-8">
-               $('#{{ k }}').dynatable({
-                  features: {
-                     paginate: true,
-                     search: true,
-                     recordCount: false
-                  },
-                  readers: {
-                     'value': function(el, record) {
-                        return Number(el.innerHTML.replace(/,/g, ''));
-                     }
-                  },
-                  writers: {
-                     'value': function(record) {
-                        return record.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                     }
+         <script type="text/javascript" charset="utf-8">
+            $('#{{ k }}').dynatable({
+               features: {
+                  paginate: true,
+                  search: true,
+                  recordCount: false
+               },
+               readers: {
+                  'value': function(el, record) {
+                     return Number(el.innerHTML.replace(/,/g, ''));
                   }
-               });
-            </script>
-         </div>
+               },
+               writers: {
+                  'value': function(record) {
+                     return record.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                  }
+               }
+            });
+         </script>
       {% endfor %}
 
 {% endblock %}
