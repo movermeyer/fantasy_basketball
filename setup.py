@@ -21,13 +21,9 @@ setup(name="Fantasy_Basketball",
       keywords = "fantasy basketball pandas",
       url = "https://github.com/dwwkelly/fantasy_basketball",
       test_suite="tests",
-      scripts=['scripts/Fantasy_Basketball'],
+      scripts=['scripts/FB_Manager.py'],
       long_description=read('README.rst'),
       packages=find_packages(),
       include_package_data=True,
       install_requires=['Click', 'numpy', 'matplotlib', 'pandas', 'jinja2'],
-      entry_points='''
-                     [console_scripts]
-                     FB_Manager=Fantasy_Basketball.scripts.FB_Manager:cli
-                   '''
       )
