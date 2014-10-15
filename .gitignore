@@ -7,3 +7,6 @@ nba_stats.csv
 stats.py
 
 test_env
+Fantasy_Basketball.egg-info/
+build
+dist
