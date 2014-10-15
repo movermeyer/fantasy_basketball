@@ -5,3 +5,5 @@ html/*html
 html/*png
 nba_stats.csv
 stats.py
+
+test_env
