@@ -246,7 +246,7 @@ def process_pages(pages):
       else:
          expr = expr1
 
-      tmp = ('normalized-value-positional' == fantasyID) or
+      tmp = ('normalized-value-positional' == fantasyID) or \
       ('rosters' == fantasyID)
 
       if tmp:
