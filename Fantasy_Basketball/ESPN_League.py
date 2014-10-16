@@ -27,29 +27,8 @@ class ESPN(object):
          :param year: The year that league takes place
          :param leagueID: The ESPN league ID
       """
-      self.leagueURL = "http://games.espn.go.com/fba/leaguerosters?" +\
-                       "leagueId={0}&seasonID={1}".format(leagueID, year)
-      self.standingsURL = "http://games.espn.go.com/fba/standings?" +\
-                          "leagueId={0}&seasonID={1}".format(leagueID, year)
 
-      self.downloadLeague()
       self.processLeague()
-
-   def downloadLeague(self):
-      """
-         fetch standings and team data from espn.com
-      """
-      self.leagueBuf = cStringIO.StringIO()
-      self.standingsBuf = cStringIO.StringIO()
-
-      c = pycurl.Curl()
-      c.setopt(c.URL, self.leagueURL)
-      c.setopt(c.WRITEFUNCTION, self.leagueBuf.write)
-      c.perform()
-
-      c.setopt(c.URL, self.standingsURL)
-      c.setopt(c.WRITEFUNCTION, self.standingsBuf.write)
-      c.perform()
 
    def processLeague(self):
       """
