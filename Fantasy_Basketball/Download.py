@@ -124,3 +124,46 @@ def downloadTeam(data_dir, team, year=time.strftime('%Y', time.localtime())):
    fp.close()
 
    return
+
+
+def downloadLeague(data_dir, leagueID, year):
+   """
+      fetch standings and team data from espn.com
+   """
+   leagueURL = "http://games.espn.go.com/fba/leaguerosters?" +\
+               "leagueId={0}&seasonID={1}".format(leagueID, year)
+   standingsURL = "http://games.espn.go.com/fba/standings?" +\
+                  "leagueId={0}&seasonID={1}".format(leagueID, year)
+
+   data_dir = os.path.join(data_dir, "league", str(year))
+   mkdir_p(data_dir)
+   league_filename = "league.html"
+   league_filename = os.path.join(data_dir, filename)
+   standings_filename = "standings.html"
+   standings_filename = os.path.join(data_dir, filename)
+
+   league_fd = open(league_filename, "w")
+   standings_fd = open(standings_filename, "w")
+
+   c = pycurl.Curl()
+   c.setopt(c.URL, leagueURL)
+   c.setopt(c.WRITEFUNCTION, league_fd)
+
+   try:
+      c.perform()
+   except:
+      import traceback
+      traceback.print_exc(file=sys.stderr)
+
+   c.setopt(c.URL, standingsURL)
+   c.setopt(c.WRITEFUNCTION, standings_fd)
+
+   try:
+      c.perform()
+   except:
+      import traceback
+      traceback.print_exc(file=sys.stderr)
+
+   c.close()
+   league_fd.close()
+   standings_fd.close()
