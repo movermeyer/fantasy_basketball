@@ -17,8 +17,16 @@
 __author__ = "Devin Kelly"
 
 import os
+import time
 import click
 import errno
+from Fantasy_Basketball.Download import download_data
+
+
+from Fantasy_Basketball import default_dir
+from Fantasy_Basketball import default_raw_data_dir
+from Fantasy_Basketball import default_processed_data_dir
+from Fantasy_Basketball import default_html_dir
 
 
 def mkdir_p(path):
@@ -31,12 +39,6 @@ def mkdir_p(path):
          raise
 
 
-default_dir = os.path.expanduser("~/.fantasy_basketball")
-default_raw_data_dir = os.path.join(default_dir, "raw_data")
-default_processed_data_dir = os.path.join(default_dir, "processed_data")
-default_html_dir = os.path.join(default_dir, "html")
-
-
 @click.group()
 def cli():
    pass
@@ -46,15 +48,32 @@ def cli():
 @click.option('--data_dir',
               default=default_raw_data_dir,
               help='Download Fantasy Basketball Data')
-def download(data_dir):
+@click.option('--teams', is_flag=True, default=False,
+              help="Download NBA Team Data Only")
+@click.option('--draft', is_flag=True, default=False,
+              help="Download Draft Data Only")
+@click.option('--league', is_flag=True, default=False,
+              help="Download Fantasy League Data Only")
+@click.option('--year', default=time.strftime('%Y', time.localtime()),
+              help="The year to use downloading stats")
+@click.option('--league_id', default=None,
+              help="The ESPN League ID to use downloading stats")
+def download(data_dir, teams, draft, league, year, league_id):
    mkdir_p(data_dir)
    click.echo('Downloading to {0}'.format(data_dir))
+   download_data(data_dir, teams, draft, league, year, league_id)
 
 
 @cli.command()
 @click.option('--data_dir',
               default=default_processed_data_dir,
               help='Process Fantasy Basketball Data')
+@click.option('--teams', is_flag=True, default=False,
+              help="Process NBA Team Data Only")
+@click.option('--draft', is_flag=True, default=False,
+              help="Process Draft Data Only")
+@click.option('--league', is_flag=True, default=False,
+              help="Process Fantasy League Data Only")
 def process(data_dir):
    mkdir_p(data_dir)
    click.echo('Processing to {0}'.format(data_dir))
@@ -64,6 +83,12 @@ def process(data_dir):
 @click.option('--data_dir',
               default=default_html_dir,
               help='Process Fantasy Basketball Data')
+@click.option('--teams', is_flag=True, default=False,
+              help="Write HTML for NBA Team Data Only")
+@click.option('--draft', is_flag=True, default=False,
+              help="Write HTML for Draft Data Only")
+@click.option('--league', is_flag=True, default=False,
+              help="Write HTML for Fantasy League Data Only")
 def write_html(data_dir):
    mkdir_p(data_dir)
    click.echo('Writing HTML Data to {0}'.format(data_dir))
