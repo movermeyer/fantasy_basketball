@@ -14,7 +14,6 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import copy
-import pycurl
 import cStringIO
 import re
 import os
@@ -86,53 +85,6 @@ class RawStats(object):
             print "downloading {0}, {1}".format(t, y)
             self.downloadTeam(t, y)
             time.sleep(10.0)
-
-   def downloadDraft(year):
-
-      filename = "{data_dir}/draft_{year}.html".format(data_dir=data_dir,
-                                                       year=year)
-      fp = open(filename, "wb")
-      curl = pycurl.Curl()
-      curl.setopt(pycurl.URL, base_draft_url.format(year=year))
-      curl.setopt(pycurl.FOLLOWLOCATION, 1)
-      curl.setopt(pycurl.MAXREDIRS, 5)
-      curl.setopt(pycurl.CONNECTTIMEOUT, 30)
-      curl.setopt(pycurl.TIMEOUT, 300)
-      curl.setopt(pycurl.NOSIGNAL, 1)
-      curl.setopt(pycurl.WRITEDATA, fp)
-      try:
-         curl.perform()
-      except:
-         import traceback
-         traceback.print_exc(file=sys.stderr)
-      curl.close()
-      fp.close()
-
-      return
-
-   def downloadTeam(self, team, year=time.strftime('%Y', time.localtime())):
-
-      filename = "{data_dir}/{team}_{year}.html".format(data_dir=data_dir,
-                                                        team=team,
-                                                        year=year)
-      fp = open(filename, "wb")
-      curl = pycurl.Curl()
-      curl.setopt(pycurl.URL, base_team_url.format(team=team, year=year))
-      curl.setopt(pycurl.FOLLOWLOCATION, 1)
-      curl.setopt(pycurl.MAXREDIRS, 5)
-      curl.setopt(pycurl.CONNECTTIMEOUT, 30)
-      curl.setopt(pycurl.TIMEOUT, 300)
-      curl.setopt(pycurl.NOSIGNAL, 1)
-      curl.setopt(pycurl.WRITEDATA, fp)
-      try:
-         curl.perform()
-      except:
-         import traceback
-         traceback.print_exc(file=sys.stderr)
-      curl.close()
-      fp.close()
-
-      return
 
    def processHTML(self):
       """ Finds the table in the downloaded HTML and converts it into a CSV """
