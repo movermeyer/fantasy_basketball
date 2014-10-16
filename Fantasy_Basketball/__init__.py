@@ -12,3 +12,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+from . import Download
+
+import os
+
+default_dir = os.path.expanduser("~/.fantasy_basketball")
+default_raw_data_dir = os.path.join(default_dir, "raw_data")
+default_processed_data_dir = os.path.join(default_dir, "processed_data")
+default_html_dir = os.path.join(default_dir, "html")
