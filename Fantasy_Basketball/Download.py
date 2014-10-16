@@ -57,18 +57,17 @@ def downloadDrafts(years):
       time.sleep(10.0)
 
 
-def downloadTeams():
+def downloadTeams(data_dir, year):
 
    teams = [u'SAS', u'OKC', u'CHI', u'BOS', u'PHO', u'MEM', u'ORL', u'NYK',
             u'PHI', u'NOH', u'UTA', u'ATL', u'DEN', u'IND', u'HOU', u'SAC',
             u'CHA', u'LAL', u'DET', u'BRK', u'MIN', u'GSW', u'TOR', u'POR',
             u'WAS', u'LAC', u'MIA', u'MIL', u'CLE', u'DAL']
 
-   for y in ['2013', '2014', '2012']:
-      for t in teams:
-         print "downloading {0}, {1}".format(t, y)
-         downloadTeam(t, y)
-         time.sleep(10.0)
+   for t in teams:
+      print "downloading {0}, {1}".format(t, year)
+      downloadTeam(data_dir, t, year)
+      time.sleep(10.0)
 
 
 def downloadDraft(data_dir, year):
