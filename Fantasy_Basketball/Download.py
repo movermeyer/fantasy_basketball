@@ -98,11 +98,14 @@ def downloadDraft(data_dir, year):
    return
 
 
-def downloadTeam(team, year=time.strftime('%Y', time.localtime())):
+def downloadTeam(data_dir, team, year=time.strftime('%Y', time.localtime())):
 
-   filename = "{data_dir}/{team}_{year}.html".format(data_dir=data_dir,
-                                                     team=team,
-                                                     year=year)
+   data_dir = os.path.join(data_dir, "teams", str(year))
+   mkdir_p(data_dir)
+
+   filename = "{team}.html".format(team=team)
+   filename = os.path.join(data_dir, filename)
+
    fp = open(filename, "wb")
    curl = pycurl.Curl()
    curl.setopt(pycurl.URL, base_team_url.format(team=team, year=year))
