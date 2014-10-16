@@ -72,7 +72,12 @@ def downloadTeams(data_dir, year):
 
 def downloadDraft(data_dir, year):
 
-   filename = "{0}/draft_{1}.html".format(data_dir, year)
+   data_dir = os.path.join(data_dir, "draft", str(year))
+   mkdir_p(data_dir)
+
+   filename = "draft.html"
+   filename = os.path.join(data_dir, filename)
+
    fp = open(filename, "wb")
    curl = pycurl.Curl()
    curl.setopt(pycurl.URL, base_draft_url.format(year=year))
