@@ -18,9 +18,12 @@ __author__ = "Devin Kelly"
 import pycurl
 import time
 import sys
+import os
+import errno
 
 base_draft_url = "http://www.basketball-reference.com/draft/NBA_{year}.html"
 base_team_url = "http://www.basketball-reference.com/teams/{team}/{year}.html"
+default_dir = os.path.expanduser("~/.fantasy_basketball")
 
 
 def downloadDrafts():
