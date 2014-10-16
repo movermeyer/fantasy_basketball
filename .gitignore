@@ -6,6 +6,8 @@ html/*png
 nba_stats.csv
 stats.py
 
+data
+
 test_env
 Fantasy_Basketball.egg-info/
 build
