@@ -26,7 +26,28 @@ base_team_url = "http://www.basketball-reference.com/teams/{team}/{year}.html"
 default_dir = os.path.expanduser("~/.fantasy_basketball")
 
 
-def downloadDrafts():
+def mkdir_p(path):
+   try:
+      os.makedirs(path)
+   except OSError as exc:
+      if exc.errno == errno.EEXIST and os.path.isdir(path):
+         pass
+      else:
+         raise
+
+
+def download_data(data_dir, teams, drafts, league, year, league_id):
+   if teams:
+      downloadTeams(data_dir, year)
+
+   if drafts:
+      downloadDraft(data_dir, year)
+
+   if (league_id) and (league_id is not None):
+      downloadLeague(data_dir, leagueID, year)
+
+
+def downloadDrafts(years):
 
    years = range(1950, 2014)
    years.reverse()
