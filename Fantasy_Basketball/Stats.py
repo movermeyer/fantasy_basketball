@@ -16,7 +16,6 @@
 __author__ = "Devin Kelly"
 
 import copy
-import pycurl
 import cStringIO
 import re
 import os
