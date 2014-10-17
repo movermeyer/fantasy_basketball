@@ -27,10 +27,6 @@ teams = [u'SAS', u'OKC', u'CHI', u'BOS', u'PHO', u'MEM', u'ORL', u'NYK',
 
 years = ['2012', '2013', '2014']
 
-cols = ['ind', 'Player', 'Age', 'G', 'GS', 'MP', 'FG', 'FGA', 'FG%', '3P',
-        '3PA', '3P%', '2P', '2PA', '2P%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB',
-        'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
-
 
 def augment_minutes(df, minutes=400):
    df = df[df.MP < minutes]
