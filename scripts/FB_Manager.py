@@ -26,8 +26,10 @@ from Fantasy_Basketball import get_player_stats
 from Fantasy_Basketball import default_dir
 from Fantasy_Basketball import default_raw_data_dir
 from Fantasy_Basketball import default_processed_data_dir
+from Fantasy_Basketball import default_plot_dir
 from Fantasy_Basketball import default_html_dir
 from Fantasy_Basketball import mkdir_p
+from Fantasy_Basketball import plot_stats
 
 
 @click.group()
@@ -86,6 +88,18 @@ def process(data_dir, teams, draft, league, year):
 def write_html(data_dir):
    mkdir_p(data_dir)
    click.echo('Writing HTML Data to {0}'.format(data_dir))
+
+
+@cli.command()
+@click.option('--data_dir',
+              default=default_dir,
+              help='Process Fantasy Basketball Data')
+@click.option('--year', default=time.strftime('%Y', time.localtime()),
+              help="The year to use downloading stats")
+def plot(data_dir, year):
+   mkdir_p(data_dir)
+   click.echo('Plotting to {0}'.format(data_dir))
+   plot_stats(data_dir, year)
 
 
 def main():
