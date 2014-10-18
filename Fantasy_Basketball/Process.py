@@ -219,12 +219,18 @@ def get_players(data_dir, year):
    df2 = get_pergame(data_dir, year)
    df3 = get_salaries(data_dir, year)
    df4 = get_advanced(data_dir, year)
-   df5 = pd.merge(df1, df2, left_on="Player", right_on="Player", how="left")
-   df6 = pd.merge(df5, df3, left_on="Player", right_on="Player", how="left")
-   df7 = pd.merge(df6, df4, left_on="Player", right_on="Player", how="left")
+   del df2['year']
+   del df3['year']
+   del df4['year']
+   df5 = pd.merge(df1, df2, left_on="Player", right_on="Player", how="inner")
+   df6 = pd.merge(df5, df3, left_on="Player", right_on="Player", how="inner")
+   df7 = pd.merge(df6, df4, left_on="Player", right_on="Player", how="inner")
+   import ipdb; ipdb.set_trace()
 
-   del df7['year_x']
-   del df7['year_y']
+   df7['MP'] = df7['MP_x']
+
+   del df7['MP_x']
+   del df7['MP_y']
    return df7
 
 
