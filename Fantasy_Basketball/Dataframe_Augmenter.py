@@ -29,8 +29,7 @@ years = ['2012', '2013', '2014']
 
 
 def augment_minutes(df, minutes=400):
-   df = df[df.MP < minutes]
-
+   df = df[df.MP > minutes]
    return df
 
 
