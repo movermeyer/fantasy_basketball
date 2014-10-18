@@ -13,9 +13,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from . import Download
 
 import os
+from Download import download_data
+from Process import get_player_stats
 from Util import mkdir_p
 
 

@@ -20,10 +20,9 @@ import os
 import time
 import click
 import errno
-from Fantasy_Basketball.Download import download_data
-from Fantasy_Basketball.Process import get_player_stats
 
-
+from Fantasy_Basketball import download_data
+from Fantasy_Basketball import get_player_stats
 from Fantasy_Basketball import default_dir
 from Fantasy_Basketball import default_raw_data_dir
 from Fantasy_Basketball import default_processed_data_dir
