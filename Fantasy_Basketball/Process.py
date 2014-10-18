@@ -195,12 +195,20 @@ def get_roster(data_dir, year):
 
    del df['No.']
 
+   # replace positions so that only C-PF-SF-SG-PG exist
+   replacement = {"Pos": {'PF-SF': 'PF', 'PG-SG': 'PG', 'PG-SG': 'PG',
+                          'SF-PF': 'SF', 'SF-SG': 'SF', '^G$': 'SG',
+                          'G-F': 'SG', 'F': 'PF', 'G-PF': 'G'}}
+   df.replace(to_replace=replacement, inplace=True)
+
+   # set height to be in inches for all players
    def tmp(s):
       t = s.split('-')
       return int(t[0]) * 12 + int(t[1])
 
    df['Experience'].replace('R', 0, inplace=True)
    df['Ht'] = df['Ht'].apply(tmp)
+
    df['Wt'] = df['Wt'].astype(int)
 
    return df
