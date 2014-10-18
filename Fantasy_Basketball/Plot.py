@@ -34,8 +34,33 @@ class Plotter(object):
       self.df = pd.read_pickle(fname)
       self.year = year
 
-def plot_value_hist(save_dir, df, img_format="eps"):
+      self.make_positional_df()
 
       mkdir_p(self.save_dir)
+
+   def make_positional_df(self):
+      self.C = self.df[self.df.Pos == 'C']
+      self.PF = self.df[self.df.Pos == 'PF']
+      self.SF = self.df[self.df.Pos == 'SF']
+      self.SG = self.df[self.df.Pos == 'SG']
+      self.PG = self.df[self.df.Pos == 'PG']
+
+   def is_plot_func(self, s):
+      if re.search("^plot_", s) is not None:
+         attr = getattr(self, s)
+         if callable(attr):
+            return True
+
+      return False
+
+   def make_all_plots(self, img_format='eps'):
+
+      attrs = dir(self)
+
+      plot_funcs = [x for x in attrs if self.is_plot_func(x)]
+
+      for func in plot_funcs:
+         f = getattr(self, func)
+         f(img_format)
 
 
