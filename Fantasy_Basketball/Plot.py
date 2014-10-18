@@ -17,10 +17,12 @@ import os
 from bs4 import BeautifulSoup
 import pandas as pd
 import errno
+import numpy as np
 
 from Util import mkdir_p
 
 import matplotlib.pyplot as plt
+import re
 
 
 class Plotter(object):
@@ -63,4 +65,69 @@ class Plotter(object):
          f = getattr(self, func)
          f(img_format)
 
+   def plot_value_hist(self, img_format="eps"):
+
+      self.df.hist('value', bins=20)
+
+      fig = plt.gcf()
+      ax = plt.gca()
+      ax.set_ylabel('Frequency')
+      ax.set_xlabel('Value')
+      ax.set_title('Value Histogram')
+      fname = "value_histogram.{0}".format(img_format)
+      fig.savefig(os.path.join(self.save_dir, fname))
+
+   def plot_stats_hist(self, img_format="eps"):
+
+      stats = ['FG%', 'FT%', 'TRB', 'AST', 'BLK', 'PTS']
+
+      for stat in stats:
+         self.df.hist(stat, bins=20)
+         fig = plt.gcf()
+         ax = plt.gca()
+         ax.set_xlabel(stat)
+         ax.set_ylabel('Frequency')
+         ax.set_title('{0} Histogram'.format(stat))
+         fname = "{0}_histogram.{1}".format(stat, img_format)
+         fig.savefig(os.path.join(self.save_dir, fname))
+
+   def plot_value_hist_by_pos(self, img_format="eps"):
+
+      for pos in ['C', 'PF', 'SF', 'SG', 'PG']:
+         df = getattr(self, pos)
+         df.hist('value', bins=20)
+         fig = plt.gcf()
+         ax = plt.gca()
+         ax.set_xlabel('Value')
+         ax.set_ylabel('Frequency')
+         ax.set_title('Value Histogram for {0}'.format(pos))
+         fname = "value_histogram_{0}.{1}".format(pos, img_format)
+         fig.savefig(os.path.join(self.save_dir, fname))
+
+   def plot_value_by_pos(self, img_format="eps"):
+
+      C_avg_value = self.C.mean()['value']
+      PF_avg_value = self.PF.mean()['value']
+      SF_avg_value = self.SF.mean()['value']
+      SG_avg_value = self.SG.mean()['value']
+      PG_avg_value = self.PG.mean()['value']
+
+      y = (C_avg_value, PF_avg_value, SF_avg_value, SG_avg_value, PG_avg_value)
+
+      N = 5
+      width = 0.5
+
+      ind = np.arange(N)  # the x locations for the groups
+
+      fig, ax = plt.subplots()
+      rects1 = ax.bar(ind, y)
+
+      # add some text for labels, title and axes ticks
+      ax.set_ylabel('Average Value')
+      ax.set_title('Average Value by Position')
+      ax.set_xticks(ind + width)
+      ax.set_xticklabels(('C', 'PF', 'SF', 'SG', 'PG'))
+
+      fname = "value_by_pos.".format(img_format)
+      fig.savefig(os.path.join(self.save_dir, fname))
 
