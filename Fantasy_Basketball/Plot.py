@@ -23,22 +23,19 @@ from Util import mkdir_p
 import matplotlib.pyplot as plt
 
 
-def plot_stats(data_dir, year):
-   default_processed_data_dir = os.path.join(data_dir, 'processed_data')
-   default_plot_dir = os.path.join(data_dir, 'plots')
-   save_dir = os.path.join(default_plot_dir, year)
-   fname = os.path.join(default_processed_data_dir, year, 'team_data.pkl')
+class Plotter(object):
 
-   df = pd.read_pickle(fname)
-   plot_value_hist(save_dir, df)
+   def __init__(self, data_dir, year):
+      default_processed_data_dir = os.path.join(data_dir, 'processed_data')
+      default_plot_dir = os.path.join(data_dir, 'plots')
+      self.save_dir = os.path.join(default_plot_dir, year)
+      fname = os.path.join(default_processed_data_dir, year, 'team_data.pkl')
 
+      self.df = pd.read_pickle(fname)
+      self.year = year
 
 def plot_value_hist(save_dir, df, img_format="eps"):
 
-   year = list(set(df['year']))[0]
-   mkdir_p(save_dir)
+      mkdir_p(self.save_dir)
 
-   df.hist('value', bins=20)
 
-   fig = plt.gcf()
-   fig.savefig(os.path.join(save_dir, "value_histogram.".format(img_format)))
