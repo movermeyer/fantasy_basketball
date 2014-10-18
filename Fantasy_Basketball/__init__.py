@@ -17,6 +17,7 @@
 import os
 from Download import download_data
 from Process import get_player_stats
+from Plot import plot_stats
 from Util import mkdir_p
 
 
