@@ -69,7 +69,7 @@ def download(data_dir, teams, draft, league, year, league_id):
               help="The year to use downloading stats")
 def process(data_dir, teams, draft, league, year):
    click.echo('Processing to {0}'.format(data_dir))
-   mkdir_p(os.path.join(data_dir, str(year)))
+   mkdir_p(os.path.join(data_dir, 'processed_data', str(year)))
    get_player_stats(data_dir, year)
 
 
