@@ -29,7 +29,7 @@ from Fantasy_Basketball import default_processed_data_dir
 from Fantasy_Basketball import default_plot_dir
 from Fantasy_Basketball import default_html_dir
 from Fantasy_Basketball import mkdir_p
-from Fantasy_Basketball import plot_stats
+from Fantasy_Basketball import Plotter
 
 
 @click.group()
@@ -99,7 +99,8 @@ def write_html(data_dir):
 def plot(data_dir, year):
    mkdir_p(data_dir)
    click.echo('Plotting to {0}'.format(data_dir))
-   plot_stats(data_dir, year)
+   plotter = Plotter(data_dir, year)
+   plotter.make_all_plots()
 
 
 def main():
