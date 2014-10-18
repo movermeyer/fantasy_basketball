@@ -37,6 +37,7 @@ def mkdir_p(path):
 
 
 def download_data(data_dir, teams, drafts, league, year, league_id):
+   data_dir = os.path.join(data_dir, 'raw_data')
    if teams:
       downloadTeams(data_dir, year)
 
