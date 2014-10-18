@@ -39,6 +39,18 @@ teams = [u'SAS', u'OKC', u'CHI', u'BOS', u'PHO', u'MEM', u'ORL', u'NYK',
          u'WAS', u'LAC', u'MIA', u'MIL', u'CLE', u'DAL', u'NOP']
 
 
+def get_player_stats(data_dir, year):
+   d = os.path.join(data_dir, 'raw_data', 'teams', str(year))
+   pkl = os.path.join(data_dir, 'processed_data', str(year))
+   mkdir_p(pkl)
+   df = get_players(d, year)
+   df = augment_minutes(df)
+   df = augment_value(df)
+   df = augment_price(df)
+   pkl = os.path.join(pkl, 'team_data.pkl')
+   df.to_pickle(pkl)
+
+
 def get_dataframe(filename, table_id):
    with open(filename, 'r') as fd:
       soup = BeautifulSoup(fd.read())
