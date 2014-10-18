@@ -21,19 +21,11 @@ import sys
 import os
 import errno
 
+from Util import mkdir_p
+
 base_draft_url = "http://www.basketball-reference.com/draft/NBA_{year}.html"
 base_team_url = "http://www.basketball-reference.com/teams/{team}/{year}.html"
 default_dir = os.path.expanduser("~/.fantasy_basketball")
-
-
-def mkdir_p(path):
-   try:
-      os.makedirs(path)
-   except OSError as exc:
-      if exc.errno == errno.EEXIST and os.path.isdir(path):
-         pass
-      else:
-         raise
 
 
 def download_data(data_dir, teams, drafts, league, year, league_id):

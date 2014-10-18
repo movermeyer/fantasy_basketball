@@ -16,6 +16,8 @@
 from . import Download
 
 import os
+from Util import mkdir_p
+
 
 default_dir = os.path.expanduser("~/.fantasy_basketball")
 default_raw_data_dir = os.path.join(default_dir, "raw_data")

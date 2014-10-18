@@ -23,15 +23,7 @@ from . import default_processed_data_dir
 from Dataframe_Augmenter import augment_minutes
 from Dataframe_Augmenter import augment_price
 from Dataframe_Augmenter import augment_value
-
-def mkdir_p(path):
-   try:
-      os.makedirs(path)
-   except OSError as exc:
-      if exc.errno == errno.EEXIST and os.path.isdir(path):
-         pass
-      else:
-         raise
+from Util import mkdir_p
 
 teams = [u'SAS', u'OKC', u'CHI', u'BOS', u'PHO', u'MEM', u'ORL', u'NYK',
          u'PHI', u'NOH', u'UTA', u'ATL', u'DEN', u'IND', u'HOU', u'SAC',

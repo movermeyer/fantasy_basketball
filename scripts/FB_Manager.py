@@ -28,16 +28,7 @@ from Fantasy_Basketball import default_dir
 from Fantasy_Basketball import default_raw_data_dir
 from Fantasy_Basketball import default_processed_data_dir
 from Fantasy_Basketball import default_html_dir
-
-
-def mkdir_p(path):
-   try:
-      os.makedirs(path)
-   except OSError as exc:
-      if exc.errno == errno.EEXIST and os.path.isdir(path):
-         pass
-      else:
-         raise
+from Fantasy_Basketball import mkdir_p
 
 
 @click.group()
