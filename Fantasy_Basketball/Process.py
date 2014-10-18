@@ -213,11 +213,17 @@ def get_players(data_dir, year):
    del df2['year']
    del df3['year']
    del df4['year']
-   df5 = pd.merge(df1, df2, left_on="Player", right_on="Player", how="inner")
-   df6 = pd.merge(df5, df3, left_on="Player", right_on="Player", how="inner")
-   df7 = pd.merge(df6, df4, left_on="Player", right_on="Player", how="inner")
-   import ipdb; ipdb.set_trace()
 
+   # FIXME -- players who get traded wind up as dupes.  here I just drop
+   # drop their first team, which isn't optimal, their stats should be
+   # averaged or something.
+   df1.drop_duplicates('Player', inplace=True, take_last=True)
+   df2.drop_duplicates('Player', inplace=True, take_last=True)
+   df3.drop_duplicates('Player', inplace=True, take_last=True)
+   df4.drop_duplicates('Player', inplace=True, take_last=True)
+   df5 = pd.merge(df1, df2, left_on="Player", right_on="Player", how="outer")
+   df6 = pd.merge(df5, df3, left_on="Player", right_on="Player", how="outer")
+   df7 = pd.merge(df6, df4, left_on="Player", right_on="Player", how="outer")
 
    return df7
 
