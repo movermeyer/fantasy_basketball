@@ -21,6 +21,7 @@ import time
 import click
 import errno
 from Fantasy_Basketball.Download import download_data
+from Fantasy_Basketball.Process import get_player_stats
 
 
 from Fantasy_Basketball import default_dir
@@ -46,7 +47,7 @@ def cli():
 
 @cli.command()
 @click.option('--data_dir',
-              default=default_raw_data_dir,
+              default=default_dir,
               help='Download Fantasy Basketball Data')
 @click.option('--teams', is_flag=True, default=False,
               help="Download NBA Team Data Only")
@@ -59,14 +60,14 @@ def cli():
 @click.option('--league_id', default=None,
               help="The ESPN League ID to use downloading stats")
 def download(data_dir, teams, draft, league, year, league_id):
-   mkdir_p(data_dir)
    click.echo('Downloading to {0}'.format(data_dir))
+   mkdir_p(data_dir)
    download_data(data_dir, teams, draft, league, year, league_id)
 
 
 @cli.command()
 @click.option('--data_dir',
-              default=default_processed_data_dir,
+              default=default_dir,
               help='Process Fantasy Basketball Data')
 @click.option('--teams', is_flag=True, default=False,
               help="Process NBA Team Data Only")
@@ -74,14 +75,17 @@ def download(data_dir, teams, draft, league, year, league_id):
               help="Process Draft Data Only")
 @click.option('--league', is_flag=True, default=False,
               help="Process Fantasy League Data Only")
-def process(data_dir):
-   mkdir_p(data_dir)
+@click.option('--year', default=time.strftime('%Y', time.localtime()),
+              help="The year to use downloading stats")
+def process(data_dir, teams, draft, league, year):
    click.echo('Processing to {0}'.format(data_dir))
+   mkdir_p(os.path.join(data_dir, str(year)))
+   get_player_stats(data_dir, year)
 
 
 @cli.command()
 @click.option('--data_dir',
-              default=default_html_dir,
+              default=default_dir,
               help='Process Fantasy Basketball Data')
 @click.option('--teams', is_flag=True, default=False,
               help="Write HTML for NBA Team Data Only")
