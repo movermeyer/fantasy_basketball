@@ -81,6 +81,7 @@ def get_advanced(data_dir, year):
    del df['Rk']
    del df['Age']
    del df['G']
+   df['MP'] = df['MP'].astype(int)
    df['PER'] = df['PER'].astype(float)
    df['TS%'] = df['TS%'].astype(float)
    df['eFG%'] = df['eFG%'].astype(float)
@@ -120,10 +121,10 @@ def get_pergame(data_dir, year):
          tmp['year'] = int(year)
          df = df.append(tmp)
 
+   del df['MP']
    df['Age'] = df['Age'].astype(int)
    df['G'] = df['G'].astype(int)
    df['GS'] = df['GS'].astype(int)
-   df['MP'] = df['MP'].astype(float)
    df['FG'] = df['FG'].astype(float)
    df['FGA'] = df['FGA'].astype(float)
    df['FG%'] = df['FG%'].astype(float)
@@ -217,10 +218,7 @@ def get_players(data_dir, year):
    df7 = pd.merge(df6, df4, left_on="Player", right_on="Player", how="inner")
    import ipdb; ipdb.set_trace()
 
-   df7['MP'] = df7['MP_x']
 
-   del df7['MP_x']
-   del df7['MP_y']
    return df7
 
 
