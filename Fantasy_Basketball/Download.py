@@ -39,26 +39,26 @@ def mkdir_p(path):
 def download_data(data_dir, teams, drafts, league, year, league_id):
    data_dir = os.path.join(data_dir, 'raw_data')
    if teams:
-      downloadTeams(data_dir, year)
+      download_teams(data_dir, year)
 
    if drafts:
-      downloadDraft(data_dir, year)
+      download_draft(data_dir, year)
 
    if (league_id) and (league_id is not None):
-      downloadLeague(data_dir, leagueID, year)
+      download_league(data_dir, leagueID, year)
 
 
-def downloadDrafts(years):
+def download_drafts(years):
 
    years = range(1950, 2014)
    years.reverse()
 
    for y in years:
-      downloadDraft(y)
+      download_draft(y)
       time.sleep(10.0)
 
 
-def downloadTeams(data_dir, year):
+def download_teams(data_dir, year):
 
    teams = [u'SAS', u'OKC', u'CHI', u'BOS', u'PHO', u'MEM', u'ORL', u'NYK',
             u'PHI', u'NOH', u'UTA', u'ATL', u'DEN', u'IND', u'HOU', u'SAC',
@@ -67,11 +67,11 @@ def downloadTeams(data_dir, year):
 
    for t in teams:
       print "downloading {0}, {1}".format(t, year)
-      downloadTeam(data_dir, t, year)
+      download_team(data_dir, t, year)
       time.sleep(10.0)
 
 
-def downloadDraft(data_dir, year):
+def download_draft(data_dir, year):
 
    data_dir = os.path.join(data_dir, "draft", str(year))
    mkdir_p(data_dir)
@@ -99,7 +99,7 @@ def downloadDraft(data_dir, year):
    return
 
 
-def downloadTeam(data_dir, team, year=time.strftime('%Y', time.localtime())):
+def download_team(data_dir, team, year=time.strftime('%Y', time.localtime())):
 
    data_dir = os.path.join(data_dir, "teams", str(year))
    mkdir_p(data_dir)
@@ -127,7 +127,7 @@ def downloadTeam(data_dir, team, year=time.strftime('%Y', time.localtime())):
    return
 
 
-def downloadLeague(data_dir, leagueID, year):
+def download_league(data_dir, leagueID, year):
    """
       fetch standings and team data from espn.com
    """
