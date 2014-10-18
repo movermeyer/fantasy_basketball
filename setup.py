@@ -26,5 +26,6 @@ setup(name="Fantasy_Basketball",
       packages=find_packages(),
       include_package_data=True,
       install_requires=['Click', 'numpy', 'matplotlib',
-                        'pandas', 'jinja2', 'pycurl'],
+                        'pandas', 'jinja2', 'pycurl',
+                        'beautifulsoup4', 'lxml'],
       )
