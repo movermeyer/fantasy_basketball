@@ -131,3 +131,31 @@ class Plotter(object):
       fname = "value_by_pos.".format(img_format)
       fig.savefig(os.path.join(self.save_dir, fname))
 
+   def plot_top_50_by_pos(self, img_format="eps"):
+      top_50 = self.df.sort('value', ascending=False)[0:50]
+
+      C = sum(top_50.Pos == 'C')
+      PF = sum(top_50.Pos == 'PF')
+      SF = sum(top_50.Pos == 'SF')
+      SG = sum(top_50.Pos == 'SG')
+      PG = sum(top_50.Pos == 'PG')
+
+      y = [C, PF, SF, SG, PG]
+
+      N = 5
+      width = 0.5
+
+      ind = np.arange(N)  # the x locations for the groups
+
+      fig, ax = plt.subplots()
+      rects1 = ax.bar(ind, y)
+
+      # add some text for labels, title and axes ticks
+      ax.set_ylabel('Number of Players')
+      ax.set_xlabel('Position')
+      ax.set_title('Number of players in the top 50 value, by position')
+      ax.set_xticks(ind + width)
+      ax.set_xticklabels(('C', 'PF', 'SF', 'SG', 'PG'))
+
+      fname = "top_50_value_by_pos.{0}".format(img_format)
+      fig.savefig(os.path.join(self.save_dir, fname))
