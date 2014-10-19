@@ -14,6 +14,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 from bs4 import BeautifulSoup
 import pandas as pd
 import errno
@@ -32,16 +33,20 @@ teams = [u'SAS', u'OKC', u'CHI', u'BOS', u'PHO', u'MEM', u'ORL', u'NYK',
 def get_player_stats(data_dir, year):
    d = os.path.join(data_dir, 'raw_data', 'teams', str(year))
    pkl = os.path.join(data_dir, 'processed_data', str(year))
-   mkdir_p(pkl)
    df = get_players(d, year)
    df = augment_minutes(df)
    df = augment_value(df)
    df = augment_price(df)
+   mkdir_p(pkl)
    pkl = os.path.join(pkl, 'team_data.pkl')
    df.to_pickle(pkl)
 
 
 def get_dataframe(filename, table_id):
+   if not os.path.isfile(filename):
+      print "Cannot open file, try downloading data\n{0}".format(filename)
+      sys.exit(1)
+
    with open(filename, 'r') as fd:
       soup = BeautifulSoup(fd.read())
 
@@ -176,6 +181,7 @@ def get_roster(data_dir, year):
    cols = ['No.', 'Player', 'Pos', 'Ht', 'Wt',
            'Birth Date', 'Experience', 'College']
 
+   none_opened = True
    for t in teams:
       filename = os.path.join(data_dir, "{0}.html".format(t))
       if os.path.isfile(filename):
@@ -183,6 +189,11 @@ def get_roster(data_dir, year):
          tmp.columns = cols
          tmp['year'] = year
          df = df.append(tmp)
+         none_opened = False
+
+   if none_opened:
+      print "Could not find raw data in {0}".format(data_dir)
+      sys.exit(1)
 
    del df['No.']
 
