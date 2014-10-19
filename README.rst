@@ -80,3 +80,4 @@ TODO
 * Config file.
 * Generate HTML from data.
 * Download and process more statistics.
+* Deal with infer_types warning for pandas > 0.14
