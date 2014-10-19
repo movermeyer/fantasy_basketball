@@ -53,7 +53,6 @@ def cli():
               help="The ESPN League ID to use downloading stats")
 def download(data_dir, teams, draft, league, year, league_id):
    click.echo('Downloading to {0}'.format(data_dir))
-   mkdir_p(data_dir)
    download_data(data_dir, teams, draft, league, year, league_id)
 
 
@@ -71,7 +70,6 @@ def download(data_dir, teams, draft, league, year, league_id):
               help="The year to use downloading stats")
 def process(data_dir, teams, draft, league, year):
    click.echo('Processing to {0}'.format(data_dir))
-   mkdir_p(os.path.join(data_dir, 'processed_data', str(year)))
    get_player_stats(data_dir, year)
 
 
@@ -86,7 +84,6 @@ def process(data_dir, teams, draft, league, year):
 @click.option('--league', is_flag=True, default=False,
               help="Write HTML for Fantasy League Data Only")
 def write_html(data_dir):
-   mkdir_p(data_dir)
    click.echo('Writing HTML Data to {0}'.format(data_dir))
 
 
@@ -97,7 +94,6 @@ def write_html(data_dir):
 @click.option('--year', default=time.strftime('%Y', time.localtime()),
               help="The year to use downloading stats")
 def plot(data_dir, year):
-   mkdir_p(data_dir)
    click.echo('Plotting to {0}'.format(data_dir))
    plotter = Plotter(data_dir, year)
    plotter.make_all_plots()
