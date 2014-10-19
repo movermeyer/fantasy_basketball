@@ -80,3 +80,7 @@ TODO
 * Generate HTML from data.
 * Download and process more statistics.
 * Deal with infer_types warning for pandas > 0.14
+
+Thanks
+======
+Thanks to `basketball-reference.com <basketball-reference.com>`_ for providing the statistics
