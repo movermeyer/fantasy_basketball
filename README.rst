@@ -26,7 +26,7 @@ Dependencies
  * matplotlib
  * pandas
  * jinja2
- * pycurl',
+ * pycurl
  * beautifulsoup4
  * lxml
  
