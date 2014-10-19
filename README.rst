@@ -21,14 +21,13 @@ Or with directly from the source code::
 Dependencies
 ============
 
- * Click
- * numpy
- * matplotlib
- * pandas
- * jinja2
- * pycurl
- * beautifulsoup4
- * lxml
+ * `Click <http://click.pocoo.org/3/>`_
+ * `numpy <http://www.numpy.org/>`_
+ * `matplotlib <matplotlib.org>`_
+ * `pandas <http://pandas.pydata.org/>`_
+ * `jinja2 <http://jinja.pocoo.org/>`_
+ * `pycurl <http://pycurl.sourceforge.net/>`_
+ * `beautifulsoup4 <http://www.crummy.com/software/BeautifulSoup/>`_
  
 Usage
 =====
