@@ -99,6 +99,16 @@ def plot(data_dir, year):
    plotter.make_all_plots()
 
 
+@cli.command()
+@click.option('--data_dir',
+              default=default_dir,
+              help='Process Fantasy Basketball Data')
+@click.option('--port', default=8080,
+              help='Serve the generated HTML statistics on the given port')
+def serve(data_dir, port):
+   click.echo('Starting server on port {0}'.format(port))
+
+
 def main():
    cli()
 
