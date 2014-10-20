@@ -14,6 +14,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import re
 import sys
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -22,6 +23,7 @@ import errno
 from Dataframe_Augmenter import augment_minutes
 from Dataframe_Augmenter import augment_price
 from Dataframe_Augmenter import augment_value
+from Dataframe_Augmenter import augment_draft_data
 from Util import mkdir_p
 
 teams = [u'SAS', u'OKC', u'CHI', u'BOS', u'PHO', u'MEM', u'ORL', u'NYK',
@@ -33,10 +35,17 @@ teams = [u'SAS', u'OKC', u'CHI', u'BOS', u'PHO', u'MEM', u'ORL', u'NYK',
 def get_player_stats(data_dir, year):
    d = os.path.join(data_dir, 'raw_data', 'teams', str(year))
    pkl = os.path.join(data_dir, 'processed_data', str(year))
+   draft_dir = os.path.join(data_dir, 'raw_data', 'draft')
+
    df = get_players(d, year)
+   if os.path.isdir(draft_dir):
+      draft_df = get_draft(draft_dir)
+      df = augment_draft_data(df, draft_df)
+
    df = augment_minutes(df)
    df = augment_value(df)
    df = augment_price(df)
+
    mkdir_p(pkl)
    pkl = os.path.join(pkl, 'team_data.pkl')
    df.to_pickle(pkl)
