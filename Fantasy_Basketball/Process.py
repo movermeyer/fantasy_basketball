@@ -67,6 +67,33 @@ def get_dataframe(filename, table_id):
    return df
 
 
+def get_draft(data_dir):
+
+   df = pd.DataFrame()
+   cols = ['Rk', 'Pk', 'Tm', 'Player', 'College', 'G', 'MP', 'PTS', 'TRB',
+           'AST', 'FG%', '3P%', 'FT%', 'MP_PG', 'PTS_PG', 'TRB_PG',
+           'AST_PG', 'WS', 'WS/48']
+   delete_cols = ['Rk', 'Tm', 'College', 'G', 'MP', 'PTS', 'TRB', 'AST',
+                  'FG%', '3P%', 'FT%', 'MP_PG', 'PTS_PG', 'TRB_PG', 'AST_PG',
+                  'WS', 'WS/48']
+
+   for root, _, _ in os.walk(data_dir, topdown=False):
+      try:
+         year = re.search(r'[0-9]{4}', root).group(0)
+      except AttributeError:
+         continue
+      d = os.path.join(data_dir, root, 'draft.html')
+      tmp = get_dataframe(d, 'stats')
+      tmp.columns = cols
+      for dc in delete_cols:
+         del tmp[dc]
+      tmp['draft_year'] = int(year)
+      tmp['Pk'] = tmp['Pk'].astype(int)
+      df = df.append(tmp)
+
+   return df
+
+
 def get_advanced(data_dir, year):
 
    df = pd.DataFrame()
