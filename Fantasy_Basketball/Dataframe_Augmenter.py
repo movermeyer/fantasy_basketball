@@ -70,3 +70,9 @@ def augment_price(df, nplayers=8, money_per_player=200, players_per_team=11):
          df.price[(df.year == y) & (df.Player == ii)] = player_price
 
    return df
+
+def augment_draft_data(df, draft_df):
+
+   df = df.merge(draft_df, left_on='Player', right_on='Player', how='inner')
+
+   return df
