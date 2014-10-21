@@ -21,6 +21,7 @@ import pandas as pd
 import numpy as np
 from jinja2 import Environment, FileSystemLoader
 
+
 class Web(object):
    """
       :raises IOError:
@@ -96,14 +97,14 @@ class Web(object):
               'fantasyID': 'value',
               'href': 'value-data.html',
               'cols': ['Player', 'Pos', 'FTeam', 'Tm', 'G',
-              'GS', 'MP', 'FG%', 'FT%', 'TRB', 'AST', 'STL',
-              'BLK', 'PTS', 'NormalizedValue']}
+                       'GS', 'MP', 'FG%', 'FT%', 'TRB', 'AST', 'STL',
+                       'BLK', 'PTS', 'NormalizedValue']}
          self.pages.append(p)
 
       self.gen_index()
       return
 
-   def add_page_images(self, image_dir):
+   def add_page_images(self):
       """
 
       """
@@ -121,7 +122,8 @@ class Web(object):
       """
          This needs a re-write
       """
-      j2_env = Environment(loader=FileSystemLoader('templates'), trim_blocks=True)
+      j2_env = Environment(loader=FileSystemLoader('templates'),
+                           trim_blocks=True)
       baseTemplate = j2_env.get_template('fantasy-template.html')
       tocTemplate = j2_env.get_template('toc.html')
       posTemplate = j2_env.get_template('positional-template.html')
@@ -144,7 +146,7 @@ class Web(object):
             expr = expr1
 
          tmp = ('normalized-value-positional' == fantasyID) or \
-         ('rosters' == fantasyID)
+               ('rosters' == fantasyID)
 
          if tmp:
             for k in htmlText.keys():
@@ -160,7 +162,8 @@ class Web(object):
                   htmlText[k] = re.sub(expr, "</thead>", htmlText[k])
             template = posTemplate
          else:
-            htmlText = htmlText[:7] + 'id="{0}" '.format(fantasyID) + htmlText[7:]
+            s = htmlText[:7]
+            htmlText = s + 'id="{0}" '.format(fantasyID) + s
             htmlText = re.sub(expr, "</thead>", htmlText)
             template = baseTemplate
 
