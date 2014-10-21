@@ -19,6 +19,7 @@ from Download import download_data
 from Process import get_player_stats
 from Plot import Plotter
 from Util import mkdir_p
+from Web import Web
 
 
 default_dir = os.path.expanduser("~/.fantasy_basketball")
