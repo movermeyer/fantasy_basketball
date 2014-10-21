@@ -39,6 +39,25 @@ class Web(object):
    def gen_html(self):
 
       self.find_data()
+      self.make_all_pages()
+
+   def is_add_page_func(self, s):
+      if re.search("^add_page_", s) is not None:
+         attr = getattr(self, s)
+         if callable(attr):
+            return True
+
+      return False
+
+   def make_all_pages(self):
+
+      attrs = dir(self)
+
+      plot_funcs = [x for x in attrs if self.is_add_page_func(x)]
+
+      for func in plot_funcs:
+         f = getattr(self, func)
+         f()
 
    def find_data(self):
       """
