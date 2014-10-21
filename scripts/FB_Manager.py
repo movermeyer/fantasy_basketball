@@ -30,6 +30,7 @@ from Fantasy_Basketball import default_plot_dir
 from Fantasy_Basketball import default_html_dir
 from Fantasy_Basketball import mkdir_p
 from Fantasy_Basketball import Plotter
+from Fantasy_Basketball import Web
 
 
 @click.group()
@@ -77,14 +78,11 @@ def process(data_dir, teams, draft, league, year):
 @click.option('--data_dir',
               default=default_dir,
               help='Process Fantasy Basketball Data')
-@click.option('--teams', is_flag=True, default=False,
-              help="Write HTML for NBA Team Data Only")
-@click.option('--draft', is_flag=True, default=False,
-              help="Write HTML for Draft Data Only")
-@click.option('--league', is_flag=True, default=False,
-              help="Write HTML for Fantasy League Data Only")
 def write_html(data_dir):
    click.echo('Writing HTML Data to {0}'.format(data_dir))
+   web = Web(data_dir)
+   web.gen_html()
+
 
 
 @cli.command()
