@@ -60,6 +60,8 @@ class Web(object):
          f = getattr(self, func)
          f()
 
+      write_html()
+
    def find_data(self):
       """
 
@@ -118,7 +120,7 @@ class Web(object):
 
       return
 
-   def make_pages(self):
+   def write_html(self):
       """
          This needs a re-write
       """
