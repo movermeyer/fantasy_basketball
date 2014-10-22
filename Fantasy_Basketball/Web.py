@@ -19,6 +19,7 @@ import fnmatch
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+from Util import mkdir_p
 from jinja2 import Environment, FileSystemLoader
 
 
@@ -130,6 +131,8 @@ class Web(object):
       tocTemplate = j2_env.get_template('toc.html')
       posTemplate = j2_env.get_template('positional-template.html')
       chartsTemplate = j2_env.get_template('charts-template.html')
+      html_dir = os.path.join(self.data_dir, 'html')
+      mkdir_p(html_dir)
 
       expr1 = re.compile(r"<tr>.*rank.*</thead>", re.MULTILINE | re.DOTALL)
       expr2 = re.compile(r"<tr>.*Pos.*</thead>", re.MULTILINE | re.DOTALL)
