@@ -54,9 +54,9 @@ class Web(object):
 
       attrs = dir(self)
 
-      plot_funcs = [x for x in attrs if self.is_add_page_func(x)]
+      gen_page_funcs = [x for x in attrs if self.is_add_page_func(x)]
 
-      for func in plot_funcs:
+      for func in gen_page_funcs:
          f = getattr(self, func)
          f()
 
