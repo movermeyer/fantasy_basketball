@@ -172,20 +172,20 @@ class Web(object):
             htmlText = re.sub(expr, "</thead>", htmlText)
             template = baseTemplate
 
-         with open(os.path.join(self.filesPath, p['href']), 'w') as fd:
+         with open(os.path.join(html_dir, p['href']), 'w') as fd:
             text = template.render(title=p['title'],
                                    fantasy_table=htmlText,
                                    fantasy_id=fantasyID,
                                    allPages=pages)
             fd.write(text)
 
-         with open(os.path.join(self.filesPath, 'charts.html'), 'w') as fd:
+         with open(os.path.join(html_dir, 'charts.html'), 'w') as fd:
             text = chartsTemplate.render(title='Charts',
                                          figs=self.figures,
                                          allPages=pages)
             fd.write(text)
 
-         with open(os.path.join(self.filesPath, 'toc.html'), 'w') as fd:
+         with open(os.path.join(html_dir, 'toc.html'), 'w') as fd:
             text = tocTemplate.render(title='Table of Contents',
                                       pages=pages,
                                       chartsUrl='charts.html',
