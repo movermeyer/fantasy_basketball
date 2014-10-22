@@ -4,36 +4,33 @@
 {% endblock %}
 
 {% block content %}
-      <!-- pos template -->
-      {% for k, v in fantasy_table.iteritems() %}
-         <div class="row top-buffer">
-            <div class="col-lg-12">
-               {{ v }}
-            </div>
+      Value Data for {{ year }}
+      <div class="row top-buffer">
+         <div class="col-lg-12">
+            {{ fantasy_table }}
          </div>
-      {% endfor %}
+      </div>
 
-
-      {% for k, v in fantasy_table.iteritems() %}
-         <script type="text/javascript" charset="utf-8">
-            $('#{{ k }}').dynatable({
-               features: {
-                  paginate: true,
-                  search: true,
-                  recordCount: false
-               },
-               readers: {
-                  'value': function(el, record) {
-                     return Number(el.innerHTML.replace(/,/g, ''));
-                  }
-               },
-               writers: {
-                  'value': function(record) {
-                     return record.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                  }
+      <script type="text/javascript" charset="utf-8">
+         $('#{{ class_id }}').dynatable({
+            features: {
+               paginate: true,
+               search: true,
+               recordCount: false
+            },
+            readers: {
+               'value': function(el, record) {
+                  return Number(el.innerHTML.replace(/,/g, ''));
                }
-            });
-         </script>
-      {% endfor %}
-
+            },
+            writers: {
+               'value': function(record) {
+                  return record.value.toFixed(2).toString();
+               },
+               'price': function(record) {
+                  return record.value.toFixed(2).toString();
+               }
+            }
+         });
+      </script>
 {% endblock %}
