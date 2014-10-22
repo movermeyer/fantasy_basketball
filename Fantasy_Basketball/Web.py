@@ -38,6 +38,13 @@ class Web(object):
       self.dataframes = []
       self.pages = []
 
+      j2_env = Environment(loader=FileSystemLoader('templates'),
+                           trim_blocks=True)
+      self.baseTemplate = j2_env.get_template('fantasy-template.html')
+      self.tocTemplate = j2_env.get_template('toc.html')
+      self.posTemplate = j2_env.get_template('positional-template.html')
+      self.chartsTemplate = j2_env.get_template('charts-template.html')
+
    def gen_html(self):
 
       self.find_data()
@@ -61,7 +68,7 @@ class Web(object):
          f = getattr(self, func)
          f()
 
-      write_html()
+      self.write_html()
 
    def find_data(self):
       """
@@ -97,97 +104,50 @@ class Web(object):
          p = {'title': 'Value Data',
               'year': year,
               'obj': df,
-              'fantasyID': 'value',
+              'table_id': 'value',
               'href': 'value-data.html',
-              'cols': ['Player', 'Pos', 'FTeam', 'Tm', 'G',
+              'cols': ['Player', 'Pos',
                        'GS', 'MP', 'FG%', 'FT%', 'TRB', 'AST', 'STL',
-                       'BLK', 'PTS', 'NormalizedValue']}
+                       'BLK', 'PTS', 'Salary', 'value', 'price'],
+              'template': self.posTemplate}
          self.pages.append(p)
 
-      self.gen_index()
       return
 
    def add_page_images(self):
       """
 
       """
-      self.gen_index()
-      return
-
-   def gen_index(self):
-      """
-
-      """
-
       return
 
    def write_html(self):
       """
          This needs a re-write
       """
-      j2_env = Environment(loader=FileSystemLoader('templates'),
-                           trim_blocks=True)
-      baseTemplate = j2_env.get_template('fantasy-template.html')
-      tocTemplate = j2_env.get_template('toc.html')
-      posTemplate = j2_env.get_template('positional-template.html')
-      chartsTemplate = j2_env.get_template('charts-template.html')
       html_dir = os.path.join(self.data_dir, 'html')
       mkdir_p(html_dir)
 
-      expr1 = re.compile(r"<tr>.*rank.*</thead>", re.MULTILINE | re.DOTALL)
-      expr2 = re.compile(r"<tr>.*Pos.*</thead>", re.MULTILINE | re.DOTALL)
-      expr3 = re.compile(r"<tr>.*FTeam.*</thead>", re.MULTILINE | re.DOTALL)
-
-      for p in pages:
-         fantasyID = p['fantasyID']
+      for p in self.pages:
          htmlText = p['obj'].to_html(columns=p['cols'],
                                      classes=["table", "table-bordered"])
+         htmlText = re.sub(r'^<table border',
+                           r'<table id="sorter_class" border',
+                           htmlText)
 
-         if fantasyID == 'pb-mean':
-            expr = expr2
-         elif fantasyID == 'teamValue':
-            expr = expr3
-         else:
-            expr = expr1
-
-         tmp = ('normalized-value-positional' == fantasyID) or \
-               ('rosters' == fantasyID)
-
-         if tmp:
-            for k in htmlText.keys():
-               newKey = re.sub(r'\s', '_', k)
-               newKey = re.sub(r'\+', '_', newKey)
-               htmlText.rename({k: newKey}, inplace=True)
-
-            for k in htmlText.keys():
-                  txt = htmlText[k][:7]
-                  htmlText[k] = txt
-                  htmlText[k] += 'id="{0}" '.format(k)
-                  htmlText[k] += txt
-                  htmlText[k] = re.sub(expr, "</thead>", htmlText[k])
-            template = posTemplate
-         else:
-            s = htmlText[:7]
-            htmlText = s + 'id="{0}" '.format(fantasyID) + s
-            htmlText = re.sub(expr, "</thead>", htmlText)
-            template = baseTemplate
-
-         with open(os.path.join(html_dir, p['href']), 'w') as fd:
+         mkdir_p(os.path.join(html_dir, str(p['year'])))
+         with open(os.path.join(html_dir, str(p['year']), p['href']), 'w') as fd:
+            template = p['template']
             text = template.render(title=p['title'],
-                                   fantasy_table=htmlText,
-                                   fantasy_id=fantasyID,
-                                   allPages=pages)
-            fd.write(text)
-
-         with open(os.path.join(html_dir, 'charts.html'), 'w') as fd:
-            text = chartsTemplate.render(title='Charts',
-                                         figs=self.figures,
-                                         allPages=pages)
-            fd.write(text)
+                                   fantasy_table=unicode(htmlText),
+                                   table_id=p['table_id'],
+                                   class_id='sorter_class',
+                                   year=p['year'],
+                                   allPages=self.pages)
+            fd.write(text.encode('UTF-8'))
 
          with open(os.path.join(html_dir, 'toc.html'), 'w') as fd:
-            text = tocTemplate.render(title='Table of Contents',
-                                      pages=pages,
-                                      chartsUrl='charts.html',
-                                      allPages=pages)
+            text = self.tocTemplate.render(title='Table of Contents',
+                                           pages=self.pages,
+                                           chartsUrl='charts.html',
+                                           allPages=self.pages)
             fd.write(text)
