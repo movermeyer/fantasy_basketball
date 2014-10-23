@@ -129,12 +129,6 @@ class Web(object):
 
       return
 
-   def add_page_images(self):
-      """
-
-      """
-      return
-
    def write_html(self):
       """
          This needs a re-write
@@ -143,26 +137,65 @@ class Web(object):
       mkdir_p(html_dir)
 
       for p in self.pages:
-         htmlText = p['obj'].to_html(columns=p['cols'],
-                                     classes=["table", "table-bordered"])
-         htmlText = re.sub(r'^<table border',
-                           r'<table id="sorter_class" border',
-                           htmlText)
+         dump_html_dir = os.path.join(html_dir, str(p['year']))
+         mkdir_p(dump_html_dir)
 
-         mkdir_p(os.path.join(html_dir, str(p['year'])))
-         with open(os.path.join(html_dir, str(p['year']), p['href']), 'w') as fd:
-            template = p['template']
-            text = template.render(title=p['title'],
-                                   fantasy_table=unicode(htmlText),
-                                   table_id=p['table_id'],
-                                   class_id='sorter_class',
-                                   year=p['year'],
-                                   allPages=self.pages)
+         with open(os.path.join(dump_html_dir, p['href']), 'w') as fd:
+            text = self.render_tables(p)
             fd.write(text.encode('UTF-8'))
 
-         with open(os.path.join(html_dir, 'toc.html'), 'w') as fd:
-            text = self.tocTemplate.render(title='Table of Contents',
-                                           pages=self.pages,
-                                           chartsUrl='charts.html',
-                                           allPages=self.pages)
-            fd.write(text)
+      self.render_plots()
+
+      self.render_toc()
+
+   def render_plots(self):
+      '''
+
+      '''
+      years = [ii['year'] for ii in self.plot_data]
+      html_dir = os.path.join(self.data_dir, 'html')
+      data = self.plot_data
+
+      for year in years:
+         plots_dir = os.path.join(html_dir, str(year))
+         mkdir_p(html_dir)
+
+         plot_files = [ii for ii in data if data['year'] == year]
+
+         with open(os.path.join(html_dir, 'plots.html'), 'w') as fd:
+            text = self.chartsTemplate.render(title='Plots',
+                                              plots=plot_files)
+            fd.write(text.encode('UTF-8'))
+
+   def render_toc(self):
+      '''
+      FIXME rewrite this
+      '''
+      html_dir = os.path.join(self.data_dir, 'html')
+      mkdir_p(html_dir)
+
+      with open(os.path.join(html_dir, 'toc.html'), 'w') as fd:
+         text = self.tocTemplate.render(title='Table of Contents',
+                                        pages=self.pages,
+                                        allPages=self.pages)
+         fd.write(text.encode('UTF-8'))
+
+   def render_tables(self, p):
+      '''
+
+      '''
+      htmlText = p['obj'].to_html(columns=p['cols'],
+                                  classes=['table', 'table-bordered'])
+      htmlText = re.sub(r'^<table border',
+                        r'<table id="sorter_class" border',
+                        htmlText)
+
+      template = p['template']
+      text = template.render(title=p['title'],
+                             fantasy_table=unicode(htmlText),
+                             table_id=p['table_id'],
+                             class_id='sorter_class',
+                             year=p['year'],
+                             allPages=self.pages)
+
+      return text
