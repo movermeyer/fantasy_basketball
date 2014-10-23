@@ -33,6 +33,7 @@ class Web(object):
 
       self.data_dir = data_dir
       self.processed_dir = os.path.join(self.data_dir, "processed_data")
+      self.plots_dir = os.path.join(self.data_dir, 'plots')
       if not os.path.isdir(self.data_dir):
          raise IOError("{0} not a valid directory".format(self.data_dir))
       self.dataframes = []
@@ -93,6 +94,20 @@ class Web(object):
             matches.append(match)
 
       self.data = matches
+
+      matches = []
+      for root, dirnames, filenames in os.walk(self.plots_dir):
+         for filename in fnmatch.filter(filenames, '*.json'):
+            year = re.sub(r'^' + self.plots_dir, '', root)
+            year = re.sub(r'^/', '', year)
+            year = re.sub(r'/$', '', year)
+            year = int(year)
+
+            os.path.join(root, filename)
+            match = {'year': year, 'data_file': df}
+            matches.append(match)
+
+      self.plot_data = matches
 
    def add_page_player_value(self):
       """
