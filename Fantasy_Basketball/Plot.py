@@ -14,6 +14,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import json
 from bs4 import BeautifulSoup
 import pandas as pd
 import errno
@@ -67,42 +68,74 @@ class Plotter(object):
 
    def plot_value_hist(self, img_format="eps"):
 
+      # FIXME - best way to get x-y data?
+      plot_data = {'xlabel': 'Frequency',
+                   'ylabel': 'Value',
+                   'title': 'Value Histogram',
+                   'x': [0],
+                   'y': [0]}
+
       self.df.hist('value', bins=20)
 
       fig = plt.gcf()
       ax = plt.gca()
-      ax.set_ylabel('Frequency')
-      ax.set_xlabel('Value')
-      ax.set_title('Value Histogram')
+      ax.set_ylabel(plot_data['xlabel'])
+      ax.set_xlabel(plot_data['ylabel'])
+      ax.set_title(plot_data['title'])
       fname = "value_histogram.{0}".format(img_format)
       fig.savefig(os.path.join(self.save_dir, fname))
+
+      fname = "value_histogram.json"
+      with open(os.path.join(self.save_dir, fname), 'w') as fd:
+         fd.write(json.dumps(plot_data))
 
    def plot_stats_hist(self, img_format="eps"):
 
       stats = ['FG%', 'FT%', 'TRB', 'AST', 'BLK', 'PTS']
 
       for stat in stats:
+         # FIXME - best way to get x-y data?
+         plot_data = {'xlabel': stat,
+                      'ylabel': 'Frequency',
+                      'title': '{0} Histogram'.format(stat),
+                      'x': [0],
+                      'y': [0]}
+
          self.df.hist(stat, bins=20)
          fig = plt.gcf()
          ax = plt.gca()
-         ax.set_xlabel(stat)
-         ax.set_ylabel('Frequency')
-         ax.set_title('{0} Histogram'.format(stat))
+         ax.set_xlabel(plot_data['xlabel'])
+         ax.set_ylabel(plot_data['ylabel'])
+         ax.set_title(plot_data['title'])
          fname = "{0}_histogram.{1}".format(stat, img_format)
          fig.savefig(os.path.join(self.save_dir, fname))
+
+         fname = "{0}_histogram.json".format(stat)
+         with open(os.path.join(self.save_dir, fname), 'w') as fd:
+            fd.write(json.dumps(plot_data))
 
    def plot_value_hist_by_pos(self, img_format="eps"):
 
       for pos in ['C', 'PF', 'SF', 'SG', 'PG']:
+         # FIXME - best way to get x-y data?
+         plot_data = {'xlabel': 'Value',
+                      'ylabel': 'Frequency',
+                      'title': 'Value Histogram for {0}'.format(pos),
+                      'x': [0],
+                      'y': [0]}
          df = getattr(self, pos)
          df.hist('value', bins=20)
          fig = plt.gcf()
          ax = plt.gca()
-         ax.set_xlabel('Value')
-         ax.set_ylabel('Frequency')
-         ax.set_title('Value Histogram for {0}'.format(pos))
+         ax.set_xlabel(plot_data['xlabel'])
+         ax.set_ylabel(plot_data['ylabel'])
+         ax.set_title(plot_data['title'])
          fname = "value_histogram_{0}.{1}".format(pos, img_format)
          fig.savefig(os.path.join(self.save_dir, fname))
+
+         fname = "value_histogram_{0}.json".format(pos)
+         with open(os.path.join(self.save_dir, fname), 'w') as fd:
+            fd.write(json.dumps(plot_data))
 
    def plot_value_by_pos(self, img_format="eps"):
 
@@ -113,23 +146,32 @@ class Plotter(object):
       PG_avg_value = self.PG.mean()['value']
 
       y = (C_avg_value, PF_avg_value, SF_avg_value, SG_avg_value, PG_avg_value)
-
       N = 5
       width = 0.5
-
       ind = np.arange(N)  # the x locations for the groups
+
+      plot_data = {'xlabel': 'Position',
+                   'ylabel': 'Average Value',
+                   'title': 'Average Value by Position',
+                   'x': ind.tolist(),
+                   'y': y}
 
       fig, ax = plt.subplots()
       rects1 = ax.bar(ind, y)
 
       # add some text for labels, title and axes ticks
-      ax.set_ylabel('Average Value')
-      ax.set_title('Average Value by Position')
+      ax.set_xlabel(plot_data['xlabel'])
+      ax.set_ylabel(plot_data['ylabel'])
+      ax.set_title(plot_data['title'])
       ax.set_xticks(ind + width)
       ax.set_xticklabels(('C', 'PF', 'SF', 'SG', 'PG'))
 
       fname = "value_by_pos.".format(img_format)
       fig.savefig(os.path.join(self.save_dir, fname))
+
+      fname = "value_by_pos.json"
+      with open(os.path.join(self.save_dir, fname), 'w') as fd:
+         fd.write(json.dumps(plot_data))
 
    def plot_top_50_by_pos(self, img_format="eps"):
       top_50 = self.df.sort('value', ascending=False)[0:50]
@@ -147,15 +189,25 @@ class Plotter(object):
 
       ind = np.arange(N)  # the x locations for the groups
 
+      plot_data = {'xlabel': 'Number of Players',
+                   'ylabel': 'Position',
+                   'title': 'Top 50 players value, by position',
+                   'x': ind.tolist(),
+                   'y': y}
+
       fig, ax = plt.subplots()
       rects1 = ax.bar(ind, y)
 
       # add some text for labels, title and axes ticks
-      ax.set_ylabel('Number of Players')
-      ax.set_xlabel('Position')
-      ax.set_title('Number of players in the top 50 value, by position')
+      ax.set_ylabel(plot_data['xlabel'])
+      ax.set_xlabel(plot_data['ylabel'])
+      ax.set_title(plot_data['title'])
       ax.set_xticks(ind + width)
       ax.set_xticklabels(('C', 'PF', 'SF', 'SG', 'PG'))
 
       fname = "top_50_value_by_pos.{0}".format(img_format)
       fig.savefig(os.path.join(self.save_dir, fname))
+
+      fname = "top_50_value_by_pos.json"
+      with open(os.path.join(self.save_dir, fname), 'w') as fd:
+         fd.write(json.dumps(plot_data))
