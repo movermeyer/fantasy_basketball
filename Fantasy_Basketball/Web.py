@@ -16,7 +16,6 @@
 import os
 import re
 import fnmatch
-import numpy as np
 from Util import mkdir_p
 from jinja2 import Environment, FileSystemLoader
 
