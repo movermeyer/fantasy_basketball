@@ -26,6 +26,9 @@ class ESPN(object):
          :param leagueID: The ESPN league ID
       """
 
+      self.year = year
+      self.leagueID = leagueID
+
       self.processLeague()
 
    def processLeague(self):
