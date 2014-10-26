@@ -76,7 +76,7 @@ class ESPN(object):
             try:
                player = row.findAll('a')[0].text
                players.append(player)
-            except:
+            except IndexError:
                pass
 
          self.teams[teamName]['players'] = players
