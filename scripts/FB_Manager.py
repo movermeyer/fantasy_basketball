@@ -22,10 +22,6 @@ import click
 from Fantasy_Basketball import download_data
 from Fantasy_Basketball import get_player_stats
 from Fantasy_Basketball import default_dir
-from Fantasy_Basketball import default_raw_data_dir
-from Fantasy_Basketball import default_processed_data_dir
-from Fantasy_Basketball import default_plot_dir
-from Fantasy_Basketball import default_html_dir
 from Fantasy_Basketball import Plotter
 from Fantasy_Basketball import Web
 
@@ -100,6 +96,7 @@ def plot(data_dir, year):
 @click.option('--port', default=8080,
               help='Serve the generated HTML statistics on the given port')
 def serve(data_dir, port):
+   html_dir = os.path.join(data_dir, 'html')
    click.echo('Starting server on port {0}'.format(port))
 
 
