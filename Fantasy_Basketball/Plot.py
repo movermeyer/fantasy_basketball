@@ -155,7 +155,7 @@ class Plotter(object):
                    'y': y}
 
       fig, ax = plt.subplots()
-      rects1 = ax.bar(ind, y)
+      ax.bar(ind, y)
 
       # add some text for labels, title and axes ticks
       ax.set_xlabel(plot_data['xlabel'])
@@ -194,7 +194,7 @@ class Plotter(object):
                    'y': y}
 
       fig, ax = plt.subplots()
-      rects1 = ax.bar(ind, y)
+      ax.bar(ind, y)
 
       # add some text for labels, title and axes ticks
       ax.set_ylabel(plot_data['xlabel'])
