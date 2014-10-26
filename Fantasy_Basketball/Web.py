@@ -74,7 +74,7 @@ class Web(object):
 
       """
       matches = []
-      for root, dirnames, filenames in os.walk(self.processed_dir):
+      for root, _, filenames in os.walk(self.processed_dir):
          for filename in fnmatch.filter(filenames, '*.pkl'):
             year = re.sub(r'^' + self.processed_dir, '', root)
             year = re.sub(r'^/', '', year)
