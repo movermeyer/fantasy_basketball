@@ -16,8 +16,6 @@
 import os
 import re
 import fnmatch
-import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
 from Util import mkdir_p
 from jinja2 import Environment, FileSystemLoader

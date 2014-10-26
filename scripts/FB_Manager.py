@@ -16,10 +16,8 @@
 
 __author__ = "Devin Kelly"
 
-import os
 import time
 import click
-import errno
 
 from Fantasy_Basketball import download_data
 from Fantasy_Basketball import get_player_stats
@@ -28,7 +26,6 @@ from Fantasy_Basketball import default_raw_data_dir
 from Fantasy_Basketball import default_processed_data_dir
 from Fantasy_Basketball import default_plot_dir
 from Fantasy_Basketball import default_html_dir
-from Fantasy_Basketball import mkdir_p
 from Fantasy_Basketball import Plotter
 from Fantasy_Basketball import Web
 
@@ -82,7 +79,6 @@ def write_html(data_dir):
    click.echo('Writing HTML Data to {0}'.format(data_dir))
    web = Web(data_dir)
    web.gen_html()
-
 
 
 @cli.command()

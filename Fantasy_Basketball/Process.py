@@ -18,7 +18,6 @@ import re
 import sys
 from bs4 import BeautifulSoup
 import pandas as pd
-import errno
 
 from Dataframe_Augmenter import augment_minutes
 from Dataframe_Augmenter import augment_price

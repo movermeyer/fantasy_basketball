@@ -13,15 +13,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import copy
-import cStringIO
-import re
 import os
-import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np
 from bs4 import BeautifulSoup
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.float_format', None)

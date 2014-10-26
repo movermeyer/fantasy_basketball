@@ -15,9 +15,7 @@
 
 import os
 import json
-from bs4 import BeautifulSoup
 import pandas as pd
-import errno
 import numpy as np
 
 from Util import mkdir_p

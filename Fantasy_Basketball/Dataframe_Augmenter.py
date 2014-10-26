@@ -13,10 +13,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import pandas as pd
-import re
-from bs4 import BeautifulSoup
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment
 
 __author__ = "Devin Kelly"
 
@@ -70,6 +67,7 @@ def augment_price(df, nplayers=8, money_per_player=200, players_per_team=11):
          df.price[(df.year == y) & (df.Player == ii)] = player_price
 
    return df
+
 
 def augment_draft_data(df, draft_df):
 

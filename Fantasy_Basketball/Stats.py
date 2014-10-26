@@ -16,13 +16,11 @@
 __author__ = "Devin Kelly"
 
 import copy
-import cStringIO
 import re
 import os
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-from bs4 import BeautifulSoup
 from jinja2 import Environment, FileSystemLoader
 
 pd.set_option('display.max_columns', None)
