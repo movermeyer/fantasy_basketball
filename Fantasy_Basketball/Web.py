@@ -156,11 +156,11 @@ class Web(object):
 
       for year in years:
          plots_dir = os.path.join(html_dir, str(year))
-         mkdir_p(html_dir)
+         mkdir_p(plots_dir)
 
          plot_files = [ii for ii in data if data['year'] == year]
 
-         with open(os.path.join(html_dir, 'plots.html'), 'w') as fd:
+         with open(os.path.join(plots_dir, 'plots.html'), 'w') as fd:
             text = self.chartsTemplate.render(title='Plots',
                                               plots=plot_files)
             fd.write(text.encode('UTF-8'))
