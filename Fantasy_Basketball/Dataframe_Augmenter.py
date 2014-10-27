@@ -40,9 +40,11 @@ def cleanup(df):
 def augment_value(df):
 
    df['value'] = (df['FG%'] - df['FG%'].mean()) / df['FG%'].std() + \
-                 (df['FT%'] - df['FG%'].mean()) / df['FT%'].std() + \
+                 (df['FT%'] - df['FT%'].mean()) / df['FT%'].std() + \
+                 (df['3P'] - df['3P'].mean()) / df['3P'].std() + \
                  (df['TRB'] - df['TRB'].mean()) / df['TRB'].std() + \
                  (df['AST'] - df['AST'].mean()) / df['AST'].std() + \
+                 (df['STL'] - df['STL'].mean()) / df['STL'].std() + \
                  (df['BLK'] - df['BLK'].mean()) / df['BLK'].std() + \
                  (df['PTS'] - df['PTS'].mean()) / df['PTS'].std()
 
