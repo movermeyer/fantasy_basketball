@@ -101,8 +101,7 @@ class Web(object):
             year = re.sub(r'/$', '', year)
             year = int(year)
 
-            os.path.join(root, filename)
-            match = {'year': year, 'data_file': df}
+            match = {'year': year, 'plot_file': filename}
             matches.append(match)
 
       self.plot_data = matches
