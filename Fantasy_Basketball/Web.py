@@ -157,7 +157,8 @@ class Web(object):
          plots_dir = os.path.join(html_dir, str(year))
          mkdir_p(plots_dir)
 
-         plot_files = [ii for ii in data if data['year'] == year]
+         # Filter all plots by year
+         plot_files = [ii for ii in data if ii['year'] == year]
 
          with open(os.path.join(plots_dir, 'plots.html'), 'w') as fd:
             text = self.chartsTemplate.render(title='Plots',
