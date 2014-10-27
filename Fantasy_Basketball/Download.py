@@ -82,7 +82,7 @@ def download_draft(data_dir, year):
    curl.setopt(pycurl.WRITEDATA, fp)
    try:
       curl.perform()
-   except:
+   except pycurl.error:
       import traceback
       traceback.print_exc(file=sys.stderr)
    curl.close()
@@ -110,7 +110,7 @@ def download_team(data_dir, team, year=time.strftime('%Y', time.localtime())):
    curl.setopt(pycurl.WRITEDATA, fp)
    try:
       curl.perform()
-   except:
+   except pycurl.error:
       import traceback
       traceback.print_exc(file=sys.stderr)
    curl.close()
@@ -144,7 +144,7 @@ def download_league(data_dir, leagueID, year):
 
    try:
       c.perform()
-   except:
+   except pycurl.error:
       import traceback
       traceback.print_exc(file=sys.stderr)
 
@@ -153,7 +153,7 @@ def download_league(data_dir, leagueID, year):
 
    try:
       c.perform()
-   except:
+   except pycurl.error:
       import traceback
       traceback.print_exc(file=sys.stderr)
 
