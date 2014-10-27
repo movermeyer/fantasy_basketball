@@ -119,7 +119,7 @@ class Web(object):
               'table_id': 'value',
               'href': 'value-data.html',
               'cols': ['Player', 'Pos',
-                       'GS', 'MP', 'FG%', 'FT%', 'TRB', 'AST', 'STL',
+                       'GS', 'MP', 'FG%', 'FT%', '3P', 'TRB', 'AST', 'STL',
                        'BLK', 'PTS', 'Salary', 'value', 'price'],
               'template': self.posTemplate}
          self.pages.append(p)
