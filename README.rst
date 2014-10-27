@@ -1,6 +1,14 @@
 fantasy_basketball
 ==================
 
+.. image:: https://pypip.in/v/Fantasy_Basketball/badge.png
+   :target: https://pypi.python.org/pypi/Fantasy_Basketball
+   :alt: Latest Version
+
+.. image:: https://landscape.io/github/dwwkelly/fantasy_basketball/master/landscape.png
+   :target: https://landscape.io/github/dwwkelly/fantasy_basketball/master
+      :alt: Code Health
+
 This package will fetch NBA stas from basketball-reference.com, parse 
 the statistics into pandas dataframes, then visualize the statistics.
 
