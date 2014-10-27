@@ -83,10 +83,15 @@ def write_html(data_dir):
               help='Process Fantasy Basketball Data')
 @click.option('--year', default=time.strftime('%Y', time.localtime()),
               help="The year to use downloading stats")
-def plot(data_dir, year):
-   click.echo('Plotting to {0}'.format(data_dir))
+@click.option('--img_format', default='eps',
+              help='Image format, EPS or PNG')
+def plot(data_dir, year, img_format):
+   if not(img_format is not 'eps' and img_format is not 'png'):
+      print "Invalid img_format, must be either 'png' or 'eps'"
+      return
+   print 'Plotting to {0}'.format(data_dir)
    plotter = Plotter(data_dir, year)
-   plotter.make_all_plots()
+   plotter.make_all_plots(img_format)
 
 
 @cli.command()
