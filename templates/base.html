@@ -67,6 +67,16 @@
          <!-- Collect the nav links, forms, and other content for toggling -->
          <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav">
+
+               <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Year<span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                  {% for year in years %}
+                     <li><a href="../{{year}}">{{year}}</a></li>
+                  {% endfor %}
+                  </ul>
+               </li>
+
                {% for k in allPages recursive %}
                   {% if title == k['title'] %}
                      <li class="active"><a href="{{k['href']}}">{{k['title']}}</a></li>

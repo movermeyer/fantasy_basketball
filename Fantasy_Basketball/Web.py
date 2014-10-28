@@ -73,6 +73,7 @@ class Web(object):
       """
 
       """
+      self.years = []
       matches = []
       for root, _, filenames in os.walk(self.processed_dir):
          for filename in fnmatch.filter(filenames, '*.pkl'):
@@ -80,6 +81,7 @@ class Web(object):
             year = re.sub(r'^/', '', year)
             year = re.sub(r'/$', '', year)
             year = int(year)
+            self.years.append(year)
 
             # If these dataframes get to be too big maybe just store the path
             # instead of all the data
@@ -90,6 +92,8 @@ class Web(object):
                data_type = 'other'
             match = {'year': year, 'df': df, 'data_type': data_type}
             matches.append(match)
+
+      self.years = list(set(self.years))
 
       self.data = matches
 
@@ -162,6 +166,7 @@ class Web(object):
 
          with open(os.path.join(plots_dir, 'plots.html'), 'w') as fd:
             text = self.chartsTemplate.render(title='Plots',
+                                              years=self.years,
                                               plots=plot_files)
             fd.write(text.encode('UTF-8'))
 
@@ -175,6 +180,7 @@ class Web(object):
       with open(os.path.join(html_dir, 'toc.html'), 'w') as fd:
          text = self.tocTemplate.render(title='Table of Contents',
                                         pages=self.pages,
+                                        years=self.years,
                                         allPages=self.pages)
          fd.write(text.encode('UTF-8'))
 
@@ -194,6 +200,7 @@ class Web(object):
                              table_id=p['table_id'],
                              class_id='sorter_class',
                              year=p['year'],
+                             years=self.years,
                              allPages=self.pages)
 
       return text
