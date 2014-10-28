@@ -9,6 +9,10 @@ fantasy_basketball
    :target: https://landscape.io/github/dwwkelly/fantasy_basketball/master
       :alt: Code Health
 
+.. image:: https://travis-ci.org/dwwkelly/fantasy_basketball.svg?branch=master
+   :target: https://travis-ci.org/dwwkelly/fantasy_basketball
+      :alt: Build Status
+
 This package will fetch NBA stas from basketball-reference.com, parse 
 the statistics into pandas dataframes, then visualize the statistics.
 
