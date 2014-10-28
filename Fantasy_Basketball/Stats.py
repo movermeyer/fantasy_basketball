@@ -81,7 +81,7 @@ class Stats(object):
       fg_pct = (self.data['FG%'] - self.data['FG%'].mean())
       fg_pct /= self.data['FG%'].std()
 
-      fg_pct = (self.data['FT%'] - self.data['FG%'].mean())
+      ft_pct = (self.data['FT%'] - self.data['FG%'].mean())
       ft_pct /= self.data['FT%'].std()
 
       trb = (self.data['TRB'] - self.data['TRB'].mean())
