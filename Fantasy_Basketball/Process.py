@@ -16,6 +16,7 @@
 import os
 import re
 import sys
+import numpy as np
 from bs4 import BeautifulSoup
 import pandas as pd
 
@@ -205,6 +206,8 @@ def get_salaries(data_dir, year):
          df = df.append(tmp, ignore_index=True)
 
    df['Salary'] = df['Salary'].str.replace(r'[$,]', '').astype('float')
+   df['Salary'] = df['Salary'] / 1e6
+   df['Salary'] = np.round(df['Salary'], 3)
    del df['ind']
 
    return df
