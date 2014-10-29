@@ -232,18 +232,28 @@ class Web(object):
 
       '''
       htmlText = p['obj'].to_html(columns=p['cols'],
-                                  classes=['table', 'table-bordered'])
+                                  classes=['table', 'table-bordered'],
+                                  index=False,
+                                  index_names=False)
       htmlText = re.sub(r'^<table border',
                         r'<table id="sorter_class" border',
                         htmlText)
 
       template = p['template']
+
+      # get all the pages for the year in 'p'
+      pages = []
+      year = int(p['year'])
+      for page in self.pages:
+         if year == int(page['year']):
+            pages.append(page)
+
       text = template.render(title=p['title'],
                              fantasy_table=unicode(htmlText),
                              table_id=p['table_id'],
                              class_id='sorter_class',
                              year=p['year'],
                              years=self.years,
-                             allPages=self.pages)
+                             allPages=pages)
 
       return text
