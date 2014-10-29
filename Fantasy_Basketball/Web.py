@@ -17,6 +17,7 @@ import os
 import re
 import pandas as pd
 import fnmatch
+from shutil import copytree
 from Util import mkdir_p
 from jinja2 import Environment, FileSystemLoader
 
@@ -46,6 +47,17 @@ class Web(object):
       self.tocTemplate = j2_env.get_template('toc.html')
       self.posTemplate = j2_env.get_template('positional-template.html')
       self.chartsTemplate = j2_env.get_template('charts-template.html')
+
+      self.copy_static_files()
+
+   def copy_static_files(self):
+      templates = pkg_resources.resource_filename(__name__, 'templates')
+      static = pkg_resources.resource_filename(__name__, 'static')
+
+      try:
+         copytree(static, os.path.join(self.html_dir, 'static'))
+      except OSError:
+         pass
 
    def gen_html(self):
 
