@@ -130,6 +130,10 @@ class Web(object):
       """
 
       """
+      cols = ['Player', 'Pos',
+              'GS', 'MP', 'FG%', 'FT%', '3P', 'TRB', 'AST', 'STL',
+              'BLK', 'PTS', 'Salary', 'value', 'price']
+
       for data_item in self.data:
          df = data_item['df']
          year = str(data_item['year'])
@@ -138,9 +142,7 @@ class Web(object):
               'obj': df,
               'table_id': 'value',
               'href': 'value-data.html',
-              'cols': ['Player', 'Pos',
-                       'GS', 'MP', 'FG%', 'FT%', '3P', 'TRB', 'AST', 'STL',
-                       'BLK', 'PTS', 'Salary', 'value', 'price'],
+              'cols': cols,
               'template': self.posTemplate}
          self.pages.append(p)
 
