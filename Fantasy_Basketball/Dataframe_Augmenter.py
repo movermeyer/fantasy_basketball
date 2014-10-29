@@ -14,6 +14,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from jinja2 import Environment
+import numpy as np
 
 __author__ = "Devin Kelly"
 
@@ -48,6 +49,8 @@ def augment_value(df):
                  (df['BLK'] - df['BLK'].mean()) / df['BLK'].std() + \
                  (df['PTS'] - df['PTS'].mean()) / df['PTS'].std()
 
+   df['value'] = np.round(df['value'], 3)
+
    return df
 
 
@@ -68,6 +71,7 @@ def augment_price(df, nplayers=8, money_per_player=200, players_per_team=11):
          player_price = money_supply * (player_value / total_value)
          df.price[(df.year == y) & (df.Player == ii)] = player_price
 
+   df['price'] = np.round(df['price'], 3)
    return df
 
 
