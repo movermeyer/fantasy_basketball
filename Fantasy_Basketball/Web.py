@@ -17,6 +17,7 @@ import os
 import re
 import pandas as pd
 import fnmatch
+import pkg_resources
 from shutil import copytree
 from Util import mkdir_p
 from jinja2 import Environment, FileSystemLoader
