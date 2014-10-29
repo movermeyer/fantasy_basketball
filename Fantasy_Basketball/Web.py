@@ -17,6 +17,7 @@ import os
 import re
 import pandas as pd
 import fnmatch
+import numpy as np
 import pkg_resources
 from shutil import copytree
 from Util import mkdir_p
@@ -143,6 +144,37 @@ class Web(object):
               'table_id': 'value',
               'href': 'value-data.html',
               'cols': cols,
+              'template': self.posTemplate}
+         self.pages.append(p)
+
+      return
+
+   def add_page_position_value(self):
+      """
+
+      """
+
+      cols_to_round = {'GS': 2, 'MP': 2, 'FG%': 3, 'FT%': 3, '3P': 2,
+                       'TRB': 2, 'AST': 2, 'STL': 2, 'BLK': 2, 'PTS': 2,
+                       'Salary': 3, 'value': 2, 'price': 2}
+
+      for data_item in self.data:
+         df = data_item['df'].groupby('Pos')
+         df = df.mean()
+         df['Pos'] = df.index
+         df.index = range(5)
+
+         for ii in cols_to_round:
+            df[ii] = np.round(df[ii], cols_to_round[ii])
+
+         year = str(data_item['year'])
+         p = {'title': 'Value by Position',
+              'year': year,
+              'obj': df,
+              'table_id': 'value-position',
+              'href': 'value-position-data.html',
+              'cols': ['Pos', 'GS', 'MP', 'FG%', 'FT%', '3P', 'TRB', 'AST',
+                       'STL', 'BLK', 'PTS', 'Salary', 'value', 'price'],
               'template': self.posTemplate}
          self.pages.append(p)
 
