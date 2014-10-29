@@ -37,6 +37,9 @@ class Web(object):
       self.dataframes = []
       self.pages = []
 
+      self.html_dir = os.path.join(self.data_dir, 'html')
+      mkdir_p(self.html_dir)
+
       j2_env = Environment(loader=FileSystemLoader('templates'),
                            trim_blocks=True)
       self.baseTemplate = j2_env.get_template('fantasy-template.html')
@@ -134,11 +137,8 @@ class Web(object):
       """
          This needs a re-write
       """
-      html_dir = os.path.join(self.data_dir, 'html')
-      mkdir_p(html_dir)
-
       for p in self.pages:
-         dump_html_dir = os.path.join(html_dir, str(p['year']))
+         dump_html_dir = os.path.join(self.html_dir, str(p['year']))
          mkdir_p(dump_html_dir)
 
          with open(os.path.join(dump_html_dir, p['href']), 'w') as fd:
@@ -154,11 +154,10 @@ class Web(object):
 
       '''
       years = [ii['year'] for ii in self.plot_data]
-      html_dir = os.path.join(self.data_dir, 'html')
       data = self.plot_data
 
       for year in years:
-         plots_dir = os.path.join(html_dir, str(year))
+         plots_dir = os.path.join(self.html_dir, str(year))
          mkdir_p(plots_dir)
 
          # Filter all plots by year
@@ -174,10 +173,7 @@ class Web(object):
       '''
       FIXME rewrite this
       '''
-      html_dir = os.path.join(self.data_dir, 'html')
-      mkdir_p(html_dir)
-
-      with open(os.path.join(html_dir, 'toc.html'), 'w') as fd:
+      with open(os.path.join(self.html_dir, 'toc.html'), 'w') as fd:
          text = self.tocTemplate.render(title='Table of Contents',
                                         pages=self.pages,
                                         years=self.years,
