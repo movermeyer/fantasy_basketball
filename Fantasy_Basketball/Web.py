@@ -84,6 +84,8 @@ class Web(object):
          f = getattr(self, func)
          f()
 
+      self.add_index_pages()
+
       self.write_html()
 
    def find_data(self):
@@ -180,6 +182,25 @@ class Web(object):
 
       return
 
+   def add_index_pages(self):
+      """
+         This must be the last page added
+      """
+
+      self.index_pages = []
+
+      for year in self.years:
+
+         links = {}
+         for ii in self.pages:
+            if year == ii['year']:
+               title = ii['title']
+               links[title] = ii['href']
+
+         page = {'year': year, 'links': links}
+
+         self.index_pages.append(page)
+
    def write_html(self):
       """
          This needs a re-write
@@ -194,7 +215,7 @@ class Web(object):
 
       self.render_plots()
 
-      self.render_toc()
+      self.render_index()
 
    def render_plots(self):
       '''
@@ -216,16 +237,29 @@ class Web(object):
                                               plots=plot_files)
             fd.write(text.encode('UTF-8'))
 
-   def render_toc(self):
+   def render_index(self):
       '''
       FIXME rewrite this
       '''
-      with open(os.path.join(self.html_dir, 'toc.html'), 'w') as fd:
-         text = self.tocTemplate.render(title='Table of Contents',
-                                        pages=self.pages,
-                                        years=self.years,
-                                        allPages=self.pages)
-         fd.write(text.encode('UTF-8'))
+
+      for p in self.index_pages:
+         index_filename = os.path.join(self.html_dir,
+                                       str(p['year']),
+                                       'index.html')
+
+         pages = []
+         for page in self.pages:
+            if int(page['year']) == int(p['year']):
+               pages.append(page)
+
+         with open(index_filename, 'w') as fd:
+            text = self.tocTemplate.render(title='Table of Contents',
+                                           year=p['year'],
+                                           links=p['links'],
+                                           years=self.years,
+                                           allPages=pages,
+                                           chartsUrl='plots.html')
+            fd.write(text.encode('UTF-8'))
 
    def render_tables(self, p):
       '''
