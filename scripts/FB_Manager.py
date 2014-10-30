@@ -16,6 +16,7 @@
 
 __author__ = "Devin Kelly"
 
+import os
 import time
 import click
 
