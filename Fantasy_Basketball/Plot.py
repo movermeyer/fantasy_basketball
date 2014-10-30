@@ -164,7 +164,7 @@ class Plotter(object):
       ax.set_xticks(ind + width)
       ax.set_xticklabels(('C', 'PF', 'SF', 'SG', 'PG'))
 
-      fname = "value_by_pos.".format(img_format)
+      fname = "value_by_pos.{0}".format(img_format)
       fig.savefig(os.path.join(self.save_dir, fname))
 
       fname = "value_by_pos.json"
