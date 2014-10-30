@@ -40,16 +40,6 @@ def download_data(data_dir, teams, drafts, league, year, league_id):
       download_league(data_dir, league_id, year)
 
 
-def download_drafts(years):
-
-   years = range(1950, 2014)
-   years.reverse()
-
-   for y in years:
-      download_draft(y)
-      time.sleep(10.0)
-
-
 def download_teams(data_dir, year):
 
    teams = [u'SAS', u'OKC', u'CHI', u'BOS', u'PHO', u'MEM', u'ORL', u'NYK',
