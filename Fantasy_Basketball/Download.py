@@ -37,7 +37,7 @@ def download_data(data_dir, teams, drafts, league, year, league_id):
       download_draft(data_dir, year)
 
    if (league_id) and (league_id is not None):
-      download_league(data_dir, leagueID, year)
+      download_league(data_dir, league_id, year)
 
 
 def download_drafts(years):
@@ -123,40 +123,51 @@ def download_league(data_dir, leagueID, year):
    """
       fetch standings and team data from espn.com
    """
+   espn_pages = []
+
+   league_dir = os.path.join(data_dir, 'league', str(year))
+   mkdir_p(league_dir)
+
    leagueURL = "http://games.espn.go.com/fba/leaguerosters?" +\
                "leagueId={0}&seasonID={1}".format(leagueID, year)
+   league_filename = "league.html"
+   league_filename = os.path.join(league_dir, league_filename)
+   espn_pages.append({'url': leagueURL, 'filename': league_filename})
+
    standingsURL = "http://games.espn.go.com/fba/standings?" +\
                   "leagueId={0}&seasonID={1}".format(leagueID, year)
-
-   data_dir = os.path.join(data_dir, "league", str(year))
-   mkdir_p(data_dir)
-   league_filename = "league.html"
-   league_filename = os.path.join(data_dir, filename)
    standings_filename = "standings.html"
-   standings_filename = os.path.join(data_dir, filename)
+   standings_filename = os.path.join(league_dir, standings_filename)
+   espn_pages.append({'url': standingsURL, 'filename': standings_filename})
 
-   league_fd = open(league_filename, "w")
-   standings_fd = open(standings_filename, "w")
+   draft_recap_url = 'http://games.espn.go.com/fba/tools/draftrecap?' +\
+                     'leagueId={leagueID}&seasonId={year}'
+   draft_recap_url = draft_recap_url.format(leagueID=leagueID, year=year)
+   draft_recap_filename = "draft_recap.html"
+   draft_recap_filename = os.path.join(league_dir, draft_recap_filename)
+   espn_pages.append({'url': draft_recap_url,
+                      'filename': draft_recap_filename})
 
-   c = pycurl.Curl()
-   c.setopt(c.URL, leagueURL)
-   c.setopt(c.WRITEFUNCTION, league_fd)
+   schedule_url = 'http://games.espn.go.com/fba/schedule?' +\
+                  'leagueId={leagueID}&seasonId={year}'
+   schedule_url = schedule_url.format(year=year, leagueID=leagueID)
+   schedule_filename = "schedule.html"
+   schedule_filename = os.path.join(league_dir, schedule_filename)
+   espn_pages.append({'url': schedule_url, 'filename': schedule_filename})
 
-   try:
-      c.perform()
-   except pycurl.error:
-      import traceback
-      traceback.print_exc(file=sys.stderr)
+   for page in espn_pages:
+      fd = open(page['filename'], "w")
 
-   c.setopt(c.URL, standingsURL)
-   c.setopt(c.WRITEFUNCTION, standings_fd)
+      c = pycurl.Curl()
+      c.setopt(c.URL, page['url'])
+      c.setopt(c.WRITEDATA, fd)
 
-   try:
-      c.perform()
-   except pycurl.error:
-      import traceback
-      traceback.print_exc(file=sys.stderr)
+      try:
+         c.perform()
+      except pycurl.error:
+         import traceback
+         traceback.print_exc(file=sys.stderr)
+
+      fd.close()
 
    c.close()
-   league_fd.close()
-   standings_fd.close()
