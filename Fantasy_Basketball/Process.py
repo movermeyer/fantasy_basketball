@@ -65,7 +65,7 @@ def get_dataframe(filename, table_id):
       rows = body.find_all('tr', {'class': ''})
    except AttributeError:
       print "Parsing {0} failed".format(filename)
-      return df.DataFrame()
+      return pd.DataFrame()
 
    rows = [str(r.encode('utf-8')) for r in rows if r['class'] == ['']]
 
