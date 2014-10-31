@@ -116,13 +116,13 @@ def download_league(data_dir, leagueID, year):
    mkdir_p(league_dir)
 
    leagueURL = "http://games.espn.go.com/fba/leaguerosters?" +\
-               "leagueId={0}&seasonID={1}".format(leagueID, year)
+               "leagueId={0}&seasonId={1}".format(leagueID, year)
    league_filename = "league.html"
    league_filename = os.path.join(league_dir, league_filename)
    espn_pages.append({'url': leagueURL, 'filename': league_filename})
 
    standingsURL = "http://games.espn.go.com/fba/standings?" +\
-                  "leagueId={0}&seasonID={1}".format(leagueID, year)
+                  "leagueId={0}&seasonId={1}".format(leagueID, year)
    standings_filename = "standings.html"
    standings_filename = os.path.join(league_dir, standings_filename)
    espn_pages.append({'url': standingsURL, 'filename': standings_filename})
