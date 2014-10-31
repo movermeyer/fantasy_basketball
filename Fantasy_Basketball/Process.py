@@ -25,11 +25,7 @@ from Dataframe_Augmenter import augment_price
 from Dataframe_Augmenter import augment_value
 from Dataframe_Augmenter import augment_draft_data
 from Util import mkdir_p
-
-teams = [u'SAS', u'OKC', u'CHI', u'BOS', u'PHO', u'MEM', u'ORL', u'NYK',
-         u'PHI', u'NOH', u'UTA', u'ATL', u'DEN', u'IND', u'HOU', u'SAC',
-         u'CHA', u'LAL', u'DET', u'BRK', u'MIN', u'GSW', u'TOR', u'POR',
-         u'WAS', u'LAC', u'MIA', u'MIL', u'CLE', u'DAL', u'NOP']
+from TeamData import teams
 
 
 def get_player_stats(data_dir, year):
@@ -111,7 +107,7 @@ def get_advanced(data_dir, year):
            '3PAr', 'ORB%', 'DRB%', 'TRB%', 'AST%', 'STL%', 'BLK%', 'TOV%',
            'USG%', 'ORtg', 'DRtg', 'OWS', 'DWS', 'WS', 'WS/48']
 
-   for t in teams:
+   for t in teams[int(year)]:
       filename = os.path.join(data_dir, "{0}.html".format(t))
       if os.path.isfile(filename):
          tmp = get_dataframe(filename, 'advanced')
@@ -154,7 +150,7 @@ def get_pergame(data_dir, year):
            '3PA', '3P%', '2P', '2PA', '2P%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB',
            'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
 
-   for t in teams:
+   for t in teams[int(year)]:
       filename = os.path.join(data_dir, "{0}.html".format(t))
       if os.path.isfile(filename):
          tmp = get_dataframe(filename, 'per_game')
@@ -197,7 +193,7 @@ def get_salaries(data_dir, year):
 
    cols = ['ind', 'Player', 'Salary']
 
-   for t in teams:
+   for t in teams[int(year)]:
       filename = os.path.join(data_dir, "{0}.html".format(t))
       if os.path.isfile(filename):
          tmp = get_dataframe(filename, 'salaries')
@@ -220,7 +216,7 @@ def get_roster(data_dir, year):
            'Birth Date', 'Experience', 'College']
 
    none_opened = True
-   for t in teams:
+   for t in teams[int(year)]:
       filename = os.path.join(data_dir, "{0}.html".format(t))
       if os.path.isfile(filename):
          tmp = get_dataframe(filename, 'roster')

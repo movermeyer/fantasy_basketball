@@ -18,11 +18,6 @@ import numpy as np
 
 __author__ = "Devin Kelly"
 
-teams = [u'SAS', u'OKC', u'CHI', u'BOS', u'PHO', u'MEM', u'ORL', u'NYK',
-         u'PHI', u'NOH', u'UTA', u'ATL', u'DEN', u'IND', u'HOU', u'SAC',
-         u'CHA', u'LAL', u'DET', u'BRK', u'MIN', u'GSW', u'TOR', u'POR',
-         u'WAS', u'LAC', u'MIA', u'MIL', u'CLE', u'DAL']
-
 years = ['2012', '2013', '2014']
 
 
