@@ -232,7 +232,7 @@ def get_roster(data_dir, year):
    del df['No.']
 
    # replace positions so that only C-PF-SF-SG-PG exist
-   replacement = {"Pos": {'PF-SF': 'PF', 'PG-SG': 'PG', 'PG-SG': 'PG',
+   replacement = {"Pos": {'PF-SF': 'PF', 'PG-SG': 'PG',
                           'SF-PF': 'SF', 'SF-SG': 'SF', '^G$': 'SG',
                           'G-F': 'SG', 'F': 'PF', 'G-PF': 'G'}}
    df.replace(to_replace=replacement, inplace=True)
