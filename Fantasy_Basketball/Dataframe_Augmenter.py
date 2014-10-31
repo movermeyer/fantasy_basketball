@@ -13,7 +13,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from jinja2 import Environment
 import numpy as np
 
 __author__ = "Devin Kelly"
@@ -49,7 +48,7 @@ def augment_value(df):
    return df
 
 
-def augment_price(df, nplayers=8, money_per_player=200, players_per_team=11):
+def augment_price(df, nplayers=6, money_per_player=200, players_per_team=13):
 
    total_picks = nplayers * players_per_team
    money_supply = float(nplayers * money_per_player)
@@ -63,6 +62,7 @@ def augment_price(df, nplayers=8, money_per_player=200, players_per_team=11):
 
       for ii in top_players.Player:
          player_value = top_players[top_players.Player == ii].value
+         player_value = 2.0 * player_value  # double the std. dev
          player_price = money_supply * (player_value / total_value)
          df.price[(df.year == y) & (df.Player == ii)] = player_price
 
