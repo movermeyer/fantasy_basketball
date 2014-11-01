@@ -19,7 +19,7 @@ import pandas as pd
 from Util import mkdir_p
 
 
-class ESPN(object):
+class ESPN_League(object):
 
    def __init__(self, data_dir, year, leagueID):
       """
@@ -38,7 +38,7 @@ class ESPN(object):
                                      'league',
                                      str(self.year))
 
-      self.processLeague()
+      self.process_league()
       self.write_pkl()
 
    def write_pkl(self):
@@ -51,14 +51,17 @@ class ESPN(object):
       mkdir_p(dst_dir)
       dst_file= os.path.join(dst_dir, 'league_data.pkl')
       self.df.to_pickle(dst_file)
+      dst_file= os.path.join(dst_dir, 'league_player_data.pkl')
+      self.team_df.to_pickle(dst_file)
 
 
-   def processLeague(self):
+   def process_league(self):
       """
          extract info from standings and league info, place into dataframe
       """
 
       self.process_standings()
+      self.process_player_data()
 
    def process_standings(self):
       """
@@ -162,20 +165,23 @@ class ESPN(object):
       df = pd.DataFrame(teams)
       return df
 
-   def process_something_else(self):
+   def process_player_data(self):
 
-      soup = BeautifulSoup(self.leagueBuf.getvalue())
+      filename = os.path.join(self.league_dir, 'league.html')
+      with open(filename, 'r') as fd:
+         soup = BeautifulSoup(fd)
+
+      data = []
       tables = soup.findAll("table", attrs={"class": "playerTableTable"})
       for table in tables:
          teamName = table.findAll('tr')[0].findAll('a')[0].text
-         teamName = teamName.lower()
+         teamName = teamName
          rows = table.findAll('tr')[2:]
-         players = []
          for row in rows:
             try:
                player = row.findAll('a')[0].text
-               players.append(player)
+               data.append({'team': teamName, 'player': player})
             except IndexError:
                pass
 
-         self.teams[teamName]['players'] = players
+      self.team_df = pd.DataFrame(data)
