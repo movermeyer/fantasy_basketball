@@ -22,6 +22,14 @@ from Util import mkdir_p
 from Web import Web
 from ESPN_League import ESPN_League
 
+# Use asserts to silence PEP8... kludgy
+assert download_data
+assert get_player_stats
+assert Plotter
+assert mkdir_p
+assert Web
+assert ESPN_League
+
 
 default_dir = os.path.expanduser("~/.fantasy_basketball")
 default_raw_data_dir = os.path.join(default_dir, "raw_data")
