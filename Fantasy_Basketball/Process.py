@@ -239,14 +239,14 @@ def get_roster(data_dir, year):
    df.replace(to_replace=replacement, inplace=True)
 
    # set height to be in inches for all players
-   def tmp(s):
+   def heigh_to_inches(s):
       if type(s) != type(str):  # FIXME this is dumb
          return 0
       t = s.split('-')
       return int(t[0]) * 12 + int(t[1])
 
    df['Experience'].replace('R', 0, inplace=True)
-   df['Ht'] = df['Ht'].apply(tmp)
+   df['Ht'] = df['Ht'].apply(heigh_to_inches)
 
    df['Wt'].fillna(0, inplace=True)
    df['Wt'] = df['Wt'].astype(int)
