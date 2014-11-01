@@ -21,6 +21,8 @@ import sys
 import os
 import errno
 
+from TeamData import teams
+
 from Util import mkdir_p
 
 base_draft_url = "http://www.basketball-reference.com/draft/NBA_{year}.html"
@@ -42,9 +44,9 @@ def download_data(data_dir, teams, drafts, league, year, league_id):
 
 def download_teams(data_dir, year):
 
-   teams = TeamData.Teams[year]
+   download_teams = teams[int(year)]
 
-   for t in teams:
+   for t in download_teams:
       print "downloading {0}, {1}".format(t, year)
       download_team(data_dir, t, year)
       time.sleep(10.0)
