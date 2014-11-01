@@ -19,7 +19,6 @@ import pycurl
 import time
 import sys
 import os
-import errno
 
 from TeamData import teams
 
