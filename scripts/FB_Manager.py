@@ -25,6 +25,7 @@ from Fantasy_Basketball import get_player_stats
 from Fantasy_Basketball import default_dir
 from Fantasy_Basketball import Plotter
 from Fantasy_Basketball import Web
+from Fantasy_Basketball import ESPN_League
 
 
 @click.group()
@@ -65,7 +66,12 @@ def download(data_dir, teams, draft, league, year, league_id):
               help="The year to use downloading stats")
 def process(data_dir, teams, draft, league, year):
    click.echo('Processing to {0}'.format(data_dir))
-   get_player_stats(data_dir, year)
+   if league:
+      ESPN_League(data_dir, year, league)
+
+   if teams:
+      get_player_stats(data_dir, year)
+
 
 
 @cli.command()
