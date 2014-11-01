@@ -103,41 +103,42 @@ def get_advanced(data_dir, year):
 
    df = pd.DataFrame()
 
-   cols = ['Rk', 'Player', 'Age', 'G', 'MP', 'PER', 'TS%', 'eFG%', 'FTr',
-           '3PAr', 'ORB%', 'DRB%', 'TRB%', 'AST%', 'STL%', 'BLK%', 'TOV%',
-           'USG%', 'ORtg', 'DRtg', 'OWS', 'DWS', 'WS', 'WS/48']
+   cols_24 = ['Rk', 'Player', 'Age', 'G', 'MP', 'PER', 'TS%', 'eFG%', 'FTr',
+              '3PAr', 'ORB%', 'DRB%', 'TRB%', 'AST%', 'STL%', 'BLK%', 'TOV%',
+              'USG%', 'ORtg', 'DRtg', 'OWS', 'DWS', 'WS', 'WS/48']
+   types = [int, unicode, int, int, int, float, float, float, float, float,
+            float, float, float, float, float, float, float, float, float,
+            float, float, float, float, float]
+   cols_24_types = dict(zip(cols_24, types))
+
+   cols_25 = ['Rk', 'Player', 'Age', 'G', 'MP', 'PER', 'TS%', '3PAr', 'FTr',
+              'ORB%', 'DRB%', 'TRB%', 'AST%', 'STL%', 'BLK%', 'TOV%', 'USG%',
+              'OWS', 'DWS', 'WS', 'WS/48', 'OBPM', 'DBPM', 'BPM', 'VORP']
+   types = [int, unicode, int, int, int, float, float, float, float, float,
+            float, float, float, float, float, float, float, float, float,
+            float, float, float, float, float, float]
+   cols_25_types = dict(zip(cols_25, types))
 
    for t in teams[int(year)]:
       filename = os.path.join(data_dir, "{0}.html".format(t))
       if os.path.isfile(filename):
          tmp = get_dataframe(filename, 'advanced')
-         tmp.columns = cols
+         tmp.dropna(axis=1, inplace=True, how='all')
+         tmp.fillna(0)
+         if tmp.shape[1] == 24:
+            tmp.columns = cols_24
+            for k in cols_24_types:
+               tmp[k] = tmp[k].astype(cols_24_types[k])
+         else:
+            tmp.columns = cols_25
+            for k in cols_25_types:
+               tmp[k] = tmp[k].astype(cols_25_types[k])
          tmp['year'] = int(year)
          df = df.append(tmp)
 
    del df['Rk']
    del df['Age']
    del df['G']
-   df['MP'] = df['MP'].astype(int)
-   df['PER'] = df['PER'].astype(float)
-   df['TS%'] = df['TS%'].astype(float)
-   df['eFG%'] = df['eFG%'].astype(float)
-   df['FTr'] = df['FTr'].astype(float)
-   df['3PAr'] = df['3PAr'].astype(float)
-   df['ORB%'] = df['ORB%'].astype(float)
-   df['DRB%'] = df['DRB%'].astype(float)
-   df['TRB%'] = df['TRB%'].astype(float)
-   df['AST%'] = df['AST%'].astype(float)
-   df['STL%'] = df['STL%'].astype(float)
-   df['BLK%'] = df['BLK%'].astype(float)
-   df['TOV%'] = df['TOV%'].astype(float)
-   df['USG%'] = df['USG%'].astype(float)
-   df['ORtg'] = df['ORtg'].astype(float)
-   df['DRtg'] = df['DRtg'].astype(float)
-   df['OWS'] = df['OWS'].astype(float)
-   df['DWS'] = df['DWS'].astype(float)
-   df['WS'] = df['WS'].astype(float)
-   df['WS/48'] = df['WS/48'].astype(float)
 
    return df
 
