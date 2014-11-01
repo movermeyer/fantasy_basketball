@@ -60,13 +60,11 @@ def download(data_dir, teams, draft, league, year, league_id):
               help='Process Fantasy Basketball Data')
 @click.option('--teams', is_flag=True, default=False,
               help="Process NBA Team Data Only")
-@click.option('--draft', is_flag=True, default=False,
-              help="Process Draft Data Only")
 @click.option('--league', is_flag=True, default=False,
               help="Process Fantasy League Data Only")
 @click.option('--year', default=time.strftime('%Y', time.localtime()),
               help="The year to use downloading stats")
-def process(data_dir, teams, draft, league, year):
+def process(data_dir, teams, league, year):
    click.echo('Processing to {0}'.format(data_dir))
    if league:
       ESPN_League(data_dir, year, league)
