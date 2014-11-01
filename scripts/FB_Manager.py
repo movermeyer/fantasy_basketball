@@ -19,6 +19,8 @@ __author__ = "Devin Kelly"
 import os
 import time
 import click
+import SimpleHTTPServer
+import SocketServer
 
 from Fantasy_Basketball import download_data
 from Fantasy_Basketball import get_player_stats
@@ -109,8 +111,18 @@ def plot(data_dir, year, img_format):
               help='Serve the generated HTML statistics on the given port')
 def serve(data_dir, port):
    html_dir = os.path.join(data_dir, 'html')
-   click.echo('Starting server on port {0}'.format(port))
+   orig_dir = os.getcwd()
+   os.chdir(html_dir)
+   Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+   httpd = SocketServer.TCPServer(("", port), Handler)
 
+   print "serving at port {0}".format(port)
+   try:
+      httpd.serve_forever()
+   except KeyboardInterrupt:
+      pass
+
+   os.chdir(orig_dir)
 
 def main():
    cli()
