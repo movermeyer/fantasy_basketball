@@ -53,7 +53,6 @@ class Web(object):
       self.copy_static_files()
 
    def copy_static_files(self):
-      templates = pkg_resources.resource_filename(__name__, 'templates')
       static = pkg_resources.resource_filename(__name__, 'static')
 
       try:
@@ -117,7 +116,7 @@ class Web(object):
       self.data = matches
 
       matches = []
-      for root, dirnames, filenames in os.walk(self.plots_dir):
+      for root, _, filenames in os.walk(self.plots_dir):
          for filename in fnmatch.filter(filenames, '*.json'):
             year = re.sub(r'^' + self.plots_dir, '', root)
             year = re.sub(r'^/', '', year)
