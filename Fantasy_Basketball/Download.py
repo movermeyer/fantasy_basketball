@@ -37,7 +37,7 @@ def download_data(data_dir, teams, drafts, league, year, league_id):
    if drafts:
       download_draft(data_dir, year)
 
-   if (league_id) and (league_id is not None):
+   if league and league_id and (league_id is not None):
       download_league(data_dir, league_id, year)
 
 
