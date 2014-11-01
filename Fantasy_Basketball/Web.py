@@ -95,6 +95,8 @@ class Web(object):
       matches = []
       for root, _, filenames in os.walk(self.processed_dir):
          for filename in fnmatch.filter(filenames, '*.pkl'):
+            if filename != 'team_data.pkl':
+               continue
             year = re.sub(r'^' + self.processed_dir, '', root)
             year = re.sub(r'^/', '', year)
             year = re.sub(r'/$', '', year)
@@ -108,6 +110,7 @@ class Web(object):
                data_type = 'team_data'
             else:
                data_type = 'other'
+
             match = {'year': year, 'df': df, 'data_type': data_type}
             matches.append(match)
 
