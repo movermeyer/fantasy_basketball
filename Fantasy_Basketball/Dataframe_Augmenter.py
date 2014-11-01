@@ -21,7 +21,17 @@ years = ['2012', '2013', '2014']
 
 
 def augment_minutes(df, minutes=400):
-   df = df[df.MP > minutes]
+   """
+      If a full season is being analyzed then use 400 minutes played
+      as a cutoff, if not, then use max_number_of_games_played * 5
+   """
+
+   max_games_played = max(df.G >= 82)
+   if max_games_played:
+      df = df[df.MP > minutes]
+   else:
+      df = df[df.MP > 5 * max_games_played]
+
    return df
 
 
