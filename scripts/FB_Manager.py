@@ -28,6 +28,7 @@ from Fantasy_Basketball import default_dir
 from Fantasy_Basketball import Plotter
 from Fantasy_Basketball import Web
 from Fantasy_Basketball import ESPN_League
+from Fantasy_Basketball import get_fantasy_teams
 
 
 @click.group()
@@ -71,6 +72,8 @@ def process(data_dir, teams, league, year):
 
    if teams:
       get_player_stats(data_dir, year)
+
+   get_fantasy_teams(data_dir, year)
 
 
 
