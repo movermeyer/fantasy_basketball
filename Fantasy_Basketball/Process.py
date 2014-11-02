@@ -24,6 +24,7 @@ from Dataframe_Augmenter import augment_minutes
 from Dataframe_Augmenter import augment_price
 from Dataframe_Augmenter import augment_value
 from Dataframe_Augmenter import augment_draft_data
+from Dataframe_Augmenter import augment_fantasy_teams
 from Util import mkdir_p
 from TeamData import teams
 
@@ -38,6 +39,7 @@ def get_player_stats(data_dir, year):
       draft_df = get_draft(draft_dir)
       df = augment_draft_data(df, draft_df)
 
+   df = augment_fantasy_teams(df, data_dir)
    df = augment_minutes(df)
    df = augment_value(df)
    df = augment_price(df)
@@ -313,3 +315,30 @@ def htmlToPandas(filename, name):
       fd.write(df.to_html().encode('utf-8'))
 
    return df
+
+def get_fantasy_teams(data_dir, year):
+   processed_dir = os.path.join(data_dir, 'processed_data', str(year))
+   team_data_file = os.path.join(processed_dir, 'team_data.pkl')
+   fantasy_team_file = os.path.join(processed_dir, 'fantasy_team_data.pkl')
+
+   if os.path.isfile(team_data_file):
+
+      df = pd.read_pickle(team_data_file)
+      df = df[df['Fantasy Team'] != 'FA']
+
+      grouped = df.groupby('Fantasy Team')
+      grouped = grouped.mean()
+      grouped['Fantasy Team'] = grouped.index
+      grouped.index = range(grouped.shape[0])
+
+      cols_to_round = {'Age': 2, 'G': 2, 'GS': 2, 'MP': 2, 'FG%': 3, 'FT%': 3,
+                       '3P': 2, 'TRB': 2, 'AST': 2, 'STL': 2, 'BLK': 2,
+                       'PTS': 2, 'Salary': 3, 'value': 2, 'price': 2,
+                       'PER': 3, 'WS': 3}
+
+      for ii in cols_to_round:
+         grouped[ii] = np.round(grouped[ii], cols_to_round[ii])
+
+      grouped.to_pickle(fantasy_team_file)
+
+   return
