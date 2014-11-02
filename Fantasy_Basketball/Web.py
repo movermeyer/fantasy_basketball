@@ -132,6 +132,32 @@ class Web(object):
 
       self.plot_data = matches
 
+   def add_page_fantasy_team(self):
+      """
+
+      """
+
+      for data_item in self.data:
+         if 'fantasy_team_data' != data_item['data_type']:
+            continue
+
+         df = data_item['df']
+         year = str(data_item['year'])
+
+         cols = [u'Fantasy Team', u'Age', u'G', u'GS', u'FG%', u'3P', u'FT%',
+                 u'TRB', u'AST', u'STL', u'BLK', u'PTS', u'Salary', u'MP',
+                 u'PER', u'WS', u'value', u'price']
+
+         p = {'title': 'Fantasy Team Data',
+              'year': year,
+              'obj': df,
+              'table_id': 'fantasy_team',
+              'href': 'fantasy-team-data.html',
+              'cols': copy.deepcopy(cols),
+              'template': self.posTemplate}
+         self.pages.append(p)
+
+
    def add_page_player_value(self):
       """
 
