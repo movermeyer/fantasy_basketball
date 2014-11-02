@@ -13,6 +13,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
 import os
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -180,7 +181,10 @@ class ESPN_League(object):
          for row in rows:
             try:
                player = row.findAll('a')[0].text
-               data.append({'team': teamName, 'player': player})
+               player = re.sub('^\s', '', player)
+               player = re.sub('\s$', '', player)
+               player = re.sub('\s\s+', ' ', player)
+               data.append({'Fantasy Team': teamName, 'Player': player})
             except IndexError:
                pass
 
