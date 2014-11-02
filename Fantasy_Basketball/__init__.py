@@ -17,6 +17,7 @@
 import os
 from Download import download_data
 from Process import get_player_stats
+from Process import get_fantasy_teams
 from Plot import Plotter
 from Util import mkdir_p
 from Web import Web
@@ -25,6 +26,7 @@ from ESPN_League import ESPN_League
 # Use asserts to silence PEP8... kludgy
 assert download_data
 assert get_player_stats
+assert get_fantasy_teams
 assert Plotter
 assert mkdir_p
 assert Web
