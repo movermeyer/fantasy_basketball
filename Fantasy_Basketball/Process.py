@@ -186,7 +186,20 @@ def get_pergame(data_dir, year):
    df['TOV'] = df['TOV'].astype(float)
    df['PF'] = df['PF'].astype(float)
    df['PTS'] = df['PTS'].astype(float)
+
+
    del df['ind']
+
+   set_types = {'Age': int, 'G': int, 'GS': int, 'FG': float, 'FGA': float,
+                'FG%': float, '3P': float, '3PA': float, '3P%': float,
+                '2P': float, '2PA': float, '2P%': float, 'FT': float,
+                'FTA': float, 'FT%': float, 'ORB': float, 'DRB': float,
+                'TRB': float, 'AST': float, 'STL': float, 'BLK': float,
+                'TOV': float, 'PF': float, 'PTS': float}
+
+   for ii in set_types:
+      df[ii] = df[ii].astype(set_types[ii])
+      df[ii].fillna(0, inplace=True)
 
    return df
 
