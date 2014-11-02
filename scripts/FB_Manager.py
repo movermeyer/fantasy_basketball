@@ -33,7 +33,7 @@ from Fantasy_Basketball import get_fantasy_teams
 
 @click.group()
 def cli():
-   pass
+    pass
 
 
 @cli.command()
@@ -66,14 +66,14 @@ def download(data_dir, teams, draft, league, year, league_id):
 @click.option('--year', default=time.strftime('%Y', time.localtime()),
               help="The year to use downloading stats")
 def process(data_dir, teams, league, year):
-   click.echo('Processing to {0}'.format(data_dir))
-   if league:
-      ESPN_League(data_dir, year, league)
+    click.echo('Processing to {0}'.format(data_dir))
+    if league:
+        ESPN_League(data_dir, year, league)
 
-   if teams:
-      get_player_stats(data_dir, year)
+    if teams:
+        get_player_stats(data_dir, year)
 
-   get_fantasy_teams(data_dir, year)
+    get_fantasy_teams(data_dir, year)
 
 
 
@@ -82,9 +82,9 @@ def process(data_dir, teams, league, year):
               default=default_dir,
               help='Process Fantasy Basketball Data')
 def write_html(data_dir):
-   click.echo('Writing HTML Data to {0}'.format(data_dir))
-   web = Web(data_dir)
-   web.gen_html()
+    click.echo('Writing HTML Data to {0}'.format(data_dir))
+    web = Web(data_dir)
+    web.gen_html()
 
 
 @cli.command()
@@ -96,12 +96,12 @@ def write_html(data_dir):
 @click.option('--img_format', default='eps',
               help='Image format, EPS or PNG')
 def plot(data_dir, year, img_format):
-   if not(img_format is not 'eps' and img_format is not 'png'):
-      print "Invalid img_format, must be either 'png' or 'eps'"
-      return
-   print 'Plotting to {0}'.format(data_dir)
-   plotter = Plotter(data_dir, year)
-   plotter.make_all_plots(img_format)
+    if not(img_format is not 'eps' and img_format is not 'png'):
+        print "Invalid img_format, must be either 'png' or 'eps'"
+        return
+    print 'Plotting to {0}'.format(data_dir)
+    plotter = Plotter(data_dir, year)
+    plotter.make_all_plots(img_format)
 
 
 @cli.command()
@@ -111,24 +111,24 @@ def plot(data_dir, year, img_format):
 @click.option('--port', default=8080,
               help='Serve the generated HTML statistics on the given port')
 def serve(data_dir, port):
-   html_dir = os.path.join(data_dir, 'html')
-   orig_dir = os.getcwd()
-   os.chdir(html_dir)
-   Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-   httpd = SocketServer.TCPServer(("", port), Handler)
+    html_dir = os.path.join(data_dir, 'html')
+    orig_dir = os.getcwd()
+    os.chdir(html_dir)
+    Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+    httpd = SocketServer.TCPServer(("", port), Handler)
 
-   print "serving at port {0}".format(port)
-   try:
-      httpd.serve_forever()
-   except KeyboardInterrupt:
-      pass
+    print "serving at port {0}".format(port)
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        pass
 
-   os.chdir(orig_dir)
+    os.chdir(orig_dir)
 
 def main():
-   cli()
+    cli()
 
-   return
+    return
 
 if __name__ == "__main__":
-   main()
+    main()
