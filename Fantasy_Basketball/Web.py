@@ -13,6 +13,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import copy
 import os
 import re
 import pandas as pd
@@ -135,9 +136,6 @@ class Web(object):
       """
 
       """
-      cols = ['Player', 'Pos',
-              'GS', 'MP', 'FG%', 'FT%', '3P', 'TRB', 'AST', 'STL',
-              'BLK', 'PTS', 'Salary', 'value', 'price']
 
       for data_item in self.data:
          if 'team_data' != data_item['data_type']:
@@ -145,12 +143,22 @@ class Web(object):
 
          df = data_item['df']
          year = str(data_item['year'])
+
+         if 'Fantasy Team' in df.keys():
+            cols = ['Player', 'Pos',
+                    'GS', 'MP', 'FG%', 'FT%', '3P', 'TRB', 'AST', 'STL',
+                    'BLK', 'PTS', 'Salary', 'value', 'price', 'Fantasy Team']
+         else:
+            cols = ['Player', 'Pos',
+                    'GS', 'MP', 'FG%', 'FT%', '3P', 'TRB', 'AST', 'STL',
+                    'BLK', 'PTS', 'Salary', 'value', 'price']
+
          p = {'title': 'Value Data',
               'year': year,
               'obj': df,
               'table_id': 'value',
               'href': 'value-data.html',
-              'cols': cols,
+              'cols': copy.deepcopy(cols),
               'template': self.posTemplate}
          self.pages.append(p)
 
@@ -181,14 +189,16 @@ class Web(object):
          for ii in cols_to_round:
             df[ii] = np.round(df[ii], cols_to_round[ii])
 
+         cols = ['Pos', 'GS', 'MP', 'FG%', 'FT%', '3P', 'TRB', 'AST',
+                 'STL', 'BLK', 'PTS', 'Salary', 'value', 'price']
+
          year = str(data_item['year'])
          p = {'title': 'Value by Position',
               'year': year,
               'obj': df,
               'table_id': 'value-position',
               'href': 'value-position-data.html',
-              'cols': ['Pos', 'GS', 'MP', 'FG%', 'FT%', '3P', 'TRB', 'AST',
-                       'STL', 'BLK', 'PTS', 'Salary', 'value', 'price'],
+              'cols': cols,
               'template': self.posTemplate}
          self.pages.append(p)
 
