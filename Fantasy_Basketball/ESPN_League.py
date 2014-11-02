@@ -22,170 +22,169 @@ from Util import mkdir_p
 
 class ESPN_League(object):
 
-   def __init__(self, data_dir, year, leagueID):
-      """
-         init ESPN object
+    def __init__(self, data_dir, year, leagueID):
+        """
+           init ESPN object
 
-         :param year: The year that league takes place
-         :param leagueID: The ESPN league ID
-      """
+           :param year: The year that league takes place
+           :param leagueID: The ESPN league ID
+        """
 
-      self.year = year
-      self.leagueID = leagueID
+        self.year = year
+        self.leagueID = leagueID
 
-      self.data_dir = data_dir
-      self.league_dir = os.path.join(self.data_dir,
-                                     'raw_data',
-                                     'league',
-                                     str(self.year))
+        self.data_dir = data_dir
+        self.league_dir = os.path.join(self.data_dir,
+                                       'raw_data',
+                                       'league',
+                                       str(self.year))
 
-      self.process_league()
-      self.write_pkl()
+        self.process_league()
+        self.write_pkl()
 
-   def write_pkl(self):
-      """
+    def write_pkl(self):
+        """
 
-      """
-      dst_dir = os.path.join(self.data_dir,
-                             'processed_data',
-                             str(self.year))
-      mkdir_p(dst_dir)
-      dst_file= os.path.join(dst_dir, 'league_data.pkl')
-      self.df.to_pickle(dst_file)
-      dst_file= os.path.join(dst_dir, 'league_player_data.pkl')
-      self.team_df.to_pickle(dst_file)
+        """
+        dst_dir = os.path.join(self.data_dir,
+                               'processed_data',
+                               str(self.year))
+        mkdir_p(dst_dir)
+        dst_file = os.path.join(dst_dir, 'league_data.pkl')
+        self.df.to_pickle(dst_file)
+        dst_file = os.path.join(dst_dir, 'league_player_data.pkl')
+        self.team_df.to_pickle(dst_file)
 
+    def process_league(self):
+        """
+           extract info from standings and league info, place into dataframe
+        """
 
-   def process_league(self):
-      """
-         extract info from standings and league info, place into dataframe
-      """
+        self.process_standings()
+        self.process_player_data()
 
-      self.process_standings()
-      self.process_player_data()
+    def process_standings(self):
+        """
 
-   def process_standings(self):
-      """
+        """
 
-      """
+        filename = os.path.join(self.league_dir, 'standings.html')
+        with open(filename, 'r') as fd:
+            soup = BeautifulSoup(fd)
 
-      filename = os.path.join(self.league_dir, 'standings.html')
-      with open(filename, 'r') as fd:
-         soup = BeautifulSoup(fd)
+        df1 = self.process_standings_table_1(soup)
+        df2 = self.process_standings_table_2(soup)
 
-      df1 = self.process_standings_table_1(soup)
-      df2 = self.process_standings_table_2(soup)
+        self.df = pd.merge(df1, df2, on='name')
 
-      self.df = pd.merge(df1, df2, on='name')
+    def process_standings_table_1(self, soup):
+        """
 
-   def process_standings_table_1(self, soup):
-      """
+        """
 
-      """
+        tables = soup.findAll("table")
+        data = []
 
-      tables = soup.findAll("table")
-      data = []
+        for table in tables:
+            if table.findAll(text='EAST'):
+                east = table
+            if table.findAll(text='WEST'):
+                west = table
 
-      for table in tables:
-         if table.findAll(text='EAST'):
-            east = table
-         if table.findAll(text='WEST'):
-            west = table
+        teams = east.findAll('tr')[2:]
+        for t in teams:
+            cols = t.findAll('td')
+            d = {}
+            d['wins'] = int(cols[1].text)
+            d['losses'] = int(cols[2].text)
+            d['ties'] = int(cols[3].text)
+            d['pct'] = float(cols[4].text)
+            if cols[5].text == '--':
+                d['gb'] = 0
+            else:
+                d['gb'] = float(cols[5].text)
+            d['conf'] = 'east'
+            teamName = (cols[0].text)
+            d['name'] = teamName
+            data.append(d)
 
-      teams = east.findAll('tr')[2:]
-      for t in teams:
-         cols = t.findAll('td')
-         d = {}
-         d['wins'] = int(cols[1].text)
-         d['losses'] = int(cols[2].text)
-         d['ties'] = int(cols[3].text)
-         d['pct'] = float(cols[4].text)
-         if cols[5].text == '--':
-            d['gb'] = 0
-         else:
-            d['gb'] = float(cols[5].text)
-         d['conf'] = 'east'
-         teamName = (cols[0].text)
-         d['name'] = teamName
-         data.append(d)
+        teams = west.findAll('tr')[2:]
+        for t in teams:
+            cols = t.findAll('td')
+            d = {}
+            d['wins'] = int(cols[1].text)
+            d['losses'] = int(cols[2].text)
+            d['ties'] = int(cols[3].text)
+            d['pct'] = float(cols[4].text)
+            if cols[5].text == '--':
+                d['gb'] = 0
+            else:
+                d['gb'] = float(cols[5].text)
+            d['conf'] = 'west'
+            teamName = (cols[0].text)
+            d['name'] = teamName
+            data.append(d)
 
-      teams = west.findAll('tr')[2:]
-      for t in teams:
-         cols = t.findAll('td')
-         d = {}
-         d['wins'] = int(cols[1].text)
-         d['losses'] = int(cols[2].text)
-         d['ties'] = int(cols[3].text)
-         d['pct'] = float(cols[4].text)
-         if cols[5].text == '--':
-            d['gb'] = 0
-         else:
-            d['gb'] = float(cols[5].text)
-         d['conf'] = 'west'
-         teamName = (cols[0].text)
-         d['name'] = teamName
-         data.append(d)
+        df = pd.DataFrame(data)
 
-      df = pd.DataFrame(data)
+        return df
 
-      return df
+    def process_standings_table_2(self, soup):
 
-   def process_standings_table_2(self, soup):
+        all_teams = soup.findAll('table', {'id': 'statsTable'})
+        all_teams = all_teams[0]
 
-      all_teams = soup.findAll('table', {'id': 'statsTable'})
-      all_teams = all_teams[0]
+        rows = all_teams.findAll('tr')
+        rows = rows[3:]  # the first three rows are fluff
 
-      rows = all_teams.findAll('tr')
-      rows = rows[3:]  # the first three rows are fluff
+        teams = []
+        for row in rows:
+            d = {}
+            cols = row.findAll('td')
 
-      teams = []
-      for row in rows:
-         d = {}
-         cols = row.findAll('td')
+            d['rank'] = int(cols[0].text)
+            d['name'] = cols[1].text
+            d['FG%'] = float(cols[3].text)
+            d['FT%'] = float(cols[4].text)
+            d['3PM'] = int(cols[5].text)
+            d['REB'] = int(cols[6].text)
+            d['AST'] = int(cols[7].text)
+            d['STL'] = int(cols[8].text)
+            d['BLK'] = int(cols[9].text)
+            d['PTS'] = int(cols[10].text)
+            d['TW'] = int(cols[11].text)
 
-         d['rank'] = int(cols[0].text)
-         d['name'] = cols[1].text
-         d['FG%'] = float(cols[3].text)
-         d['FT%'] = float(cols[4].text)
-         d['3PM'] = int(cols[5].text)
-         d['REB'] = int(cols[6].text)
-         d['AST'] = int(cols[7].text)
-         d['STL'] = int(cols[8].text)
-         d['BLK'] = int(cols[9].text)
-         d['PTS'] = int(cols[10].text)
-         d['TW'] = int(cols[11].text)
-
-         # ESPN changed their table format... thanks!
-         try:
-            d['moves'] = int(cols[14].text)
-         except IndexError:
-            d['moves'] = int(cols[13].text)
-
-         teams.append(d)
-
-      df = pd.DataFrame(teams)
-      return df
-
-   def process_player_data(self):
-
-      filename = os.path.join(self.league_dir, 'league.html')
-      with open(filename, 'r') as fd:
-         soup = BeautifulSoup(fd)
-
-      data = []
-      tables = soup.findAll("table", attrs={"class": "playerTableTable"})
-      for table in tables:
-         teamName = table.findAll('tr')[0].findAll('a')[0].text
-         teamName = teamName
-         rows = table.findAll('tr')[2:]
-         for row in rows:
+            # ESPN changed their table format... thanks!
             try:
-               player = row.findAll('a')[0].text
-               player = re.sub('^\s', '', player)
-               player = re.sub('\s$', '', player)
-               player = re.sub('\s\s+', ' ', player)
-               data.append({'Fantasy Team': teamName, 'Player': player})
+                d['moves'] = int(cols[14].text)
             except IndexError:
-               pass
+                d['moves'] = int(cols[13].text)
 
-      self.team_df = pd.DataFrame(data)
+            teams.append(d)
+
+        df = pd.DataFrame(teams)
+        return df
+
+    def process_player_data(self):
+
+        filename = os.path.join(self.league_dir, 'league.html')
+        with open(filename, 'r') as fd:
+            soup = BeautifulSoup(fd)
+
+        data = []
+        tables = soup.findAll("table", attrs={"class": "playerTableTable"})
+        for table in tables:
+            teamName = table.findAll('tr')[0].findAll('a')[0].text
+            teamName = teamName
+            rows = table.findAll('tr')[2:]
+            for row in rows:
+                try:
+                    player = row.findAll('a')[0].text
+                    player = re.sub('^\s', '', player)
+                    player = re.sub('\s$', '', player)
+                    player = re.sub('\s\s+', ' ', player)
+                    data.append({'Fantasy Team': teamName, 'Player': player})
+                except IndexError:
+                    pass
+
+        self.team_df = pd.DataFrame(data)
