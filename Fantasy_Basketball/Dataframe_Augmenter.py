@@ -13,11 +13,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import pandas as pd
 import numpy as np
 
 __author__ = "Devin Kelly"
-
-years = ['2012', '2013', '2014']
 
 
 def augment_minutes(df, minutes=400):
@@ -36,6 +36,9 @@ def augment_minutes(df, minutes=400):
 
 
 def cleanup(df):
+   """
+
+   """
    df = df.fillna(0.0)
    df = df.dropna()
    df = augment_minutes(df)
@@ -43,6 +46,9 @@ def cleanup(df):
 
 
 def augment_value(df):
+   """
+
+   """
 
    df['value'] = (df['FG%'] - df['FG%'].mean()) / df['FG%'].std() + \
                  (df['FT%'] - df['FT%'].mean()) / df['FT%'].std() + \
@@ -59,6 +65,9 @@ def augment_value(df):
 
 
 def augment_price(df, nplayers=6, money_per_player=200, players_per_team=13):
+   """
+
+   """
 
    total_picks = nplayers * players_per_team
    money_supply = float(nplayers * money_per_player)
@@ -81,7 +90,28 @@ def augment_price(df, nplayers=6, money_per_player=200, players_per_team=13):
 
 
 def augment_draft_data(df, draft_df):
+   """
+
+   """
 
    df = df.merge(draft_df, left_on='Player', right_on='Player', how='inner')
+
+   return df
+
+def augment_fantasy_teams(df, data_dir):
+   """
+
+   """
+
+   year = int(max(set(df['year'])))
+   processed_dir = os.path.join(data_dir, 'processed_data', str(year))
+   league_data_file = os.path.join(processed_dir, 'league_player_data.pkl')
+
+   if os.path.isfile(league_data_file):
+
+      league_df = pd.read_pickle(league_data_file)
+
+      df = pd.merge(df, league_df, on='Player', how='outer')
+      df['Fantasy Team'] = df['Fantasy Team'].fillna('FA')
 
    return df
