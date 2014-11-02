@@ -95,8 +95,6 @@ class Web(object):
       matches = []
       for root, _, filenames in os.walk(self.processed_dir):
          for filename in fnmatch.filter(filenames, '*.pkl'):
-            if filename != 'team_data.pkl':
-               continue
             year = re.sub(r'^' + self.processed_dir, '', root)
             year = re.sub(r'^/', '', year)
             year = re.sub(r'/$', '', year)
@@ -106,10 +104,12 @@ class Web(object):
             # If these dataframes get to be too big maybe just store the path
             # instead of all the data
             df = pd.read_pickle(os.path.join(root, filename))
-            if 'team_data' in filename:
+            if 'team_data.pkl' == filename:
                data_type = 'team_data'
+            elif 'fantasy_team_data.pkl' == filename:
+               data_type = 'fantasy_team_data'
             else:
-               data_type = 'other'
+               continue
 
             match = {'year': year, 'df': df, 'data_type': data_type}
             matches.append(match)
@@ -140,6 +140,9 @@ class Web(object):
               'BLK', 'PTS', 'Salary', 'value', 'price']
 
       for data_item in self.data:
+         if 'team_data' != data_item['data_type']:
+            continue
+
          df = data_item['df']
          year = str(data_item['year'])
          p = {'title': 'Value Data',
@@ -163,7 +166,14 @@ class Web(object):
                        'Salary': 3, 'value': 2, 'price': 2}
 
       for data_item in self.data:
-         df = data_item['df'].groupby('Pos')
+         if 'team_data' != data_item['data_type']:
+            continue
+         try:
+            df = data_item['df'].groupby('Pos')
+         except:
+            print data_item['data_type']
+            import ipdb; ipdb.set_trace()
+
          df = df.mean()
          df['Pos'] = df.index
          df.index = range(5)
