@@ -103,230 +103,230 @@ def get_draft(data_dir):
 
 def get_advanced(data_dir, year):
 
-   df = pd.DataFrame()
+    df = pd.DataFrame()
 
-   cols_24 = ['Rk', 'Player', 'Age', 'G', 'MP', 'PER', 'TS%', 'eFG%', 'FTr',
-              '3PAr', 'ORB%', 'DRB%', 'TRB%', 'AST%', 'STL%', 'BLK%', 'TOV%',
-              'USG%', 'ORtg', 'DRtg', 'OWS', 'DWS', 'WS', 'WS/48']
-   types = [int, unicode, int, int, int, float, float, float, float, float,
-            float, float, float, float, float, float, float, float, float,
-            float, float, float, float, float]
-   cols_24_types = dict(zip(cols_24, types))
+    cols_24 = ['Rk', 'Player', 'Age', 'G', 'MP', 'PER', 'TS%', 'eFG%', 'FTr',
+               '3PAr', 'ORB%', 'DRB%', 'TRB%', 'AST%', 'STL%', 'BLK%', 'TOV%',
+               'USG%', 'ORtg', 'DRtg', 'OWS', 'DWS', 'WS', 'WS/48']
+    types = [int, unicode, int, int, int, float, float, float, float, float,
+             float, float, float, float, float, float, float, float, float,
+             float, float, float, float, float]
+    cols_24_types = dict(zip(cols_24, types))
 
-   cols_25 = ['Rk', 'Player', 'Age', 'G', 'MP', 'PER', 'TS%', '3PAr', 'FTr',
-              'ORB%', 'DRB%', 'TRB%', 'AST%', 'STL%', 'BLK%', 'TOV%', 'USG%',
-              'OWS', 'DWS', 'WS', 'WS/48', 'OBPM', 'DBPM', 'BPM', 'VORP']
-   types = [int, unicode, int, int, int, float, float, float, float, float,
-            float, float, float, float, float, float, float, float, float,
-            float, float, float, float, float, float]
-   cols_25_types = dict(zip(cols_25, types))
+    cols_25 = ['Rk', 'Player', 'Age', 'G', 'MP', 'PER', 'TS%', '3PAr', 'FTr',
+               'ORB%', 'DRB%', 'TRB%', 'AST%', 'STL%', 'BLK%', 'TOV%', 'USG%',
+               'OWS', 'DWS', 'WS', 'WS/48', 'OBPM', 'DBPM', 'BPM', 'VORP']
+    types = [int, unicode, int, int, int, float, float, float, float, float,
+             float, float, float, float, float, float, float, float, float,
+             float, float, float, float, float, float]
+    cols_25_types = dict(zip(cols_25, types))
 
-   for t in teams[int(year)]:
-      filename = os.path.join(data_dir, "{0}.html".format(t))
-      if os.path.isfile(filename):
-         tmp = get_dataframe(filename, 'advanced')
-         tmp.dropna(axis=1, inplace=True, how='all')
-         tmp.fillna(0)
-         if tmp.shape[1] == 24:
-            tmp.columns = cols_24
-            for k in cols_24_types:
-               tmp[k] = tmp[k].astype(cols_24_types[k])
-         else:
-            tmp.columns = cols_25
-            for k in cols_25_types:
-               tmp[k] = tmp[k].astype(cols_25_types[k])
-         tmp['year'] = int(year)
-         df = df.append(tmp)
+    for t in teams[int(year)]:
+        filename = os.path.join(data_dir, "{0}.html".format(t))
+        if os.path.isfile(filename):
+            tmp = get_dataframe(filename, 'advanced')
+            tmp.dropna(axis=1, inplace=True, how='all')
+            tmp.fillna(0)
+            if tmp.shape[1] == 24:
+                tmp.columns = cols_24
+                for k in cols_24_types:
+                    tmp[k] = tmp[k].astype(cols_24_types[k])
+            else:
+                tmp.columns = cols_25
+                for k in cols_25_types:
+                    tmp[k] = tmp[k].astype(cols_25_types[k])
+            tmp['year'] = int(year)
+            df = df.append(tmp)
 
-   del df['Rk']
-   del df['Age']
-   del df['G']
+    del df['Rk']
+    del df['Age']
+    del df['G']
 
-   return df
+    return df
 
 
 def get_pergame(data_dir, year):
 
-   df = pd.DataFrame()
+    df = pd.DataFrame()
 
-   cols = ['ind', 'Player', 'Age', 'G', 'GS', 'MP', 'FG', 'FGA', 'FG%', '3P',
-           '3PA', '3P%', '2P', '2PA', '2P%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB',
-           'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
+    cols = ['ind', 'Player', 'Age', 'G', 'GS', 'MP', 'FG', 'FGA', 'FG%', '3P',
+            '3PA', '3P%', '2P', '2PA', '2P%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB',
+            'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
 
-   for t in teams[int(year)]:
-      filename = os.path.join(data_dir, "{0}.html".format(t))
-      if os.path.isfile(filename):
-         tmp = get_dataframe(filename, 'per_game')
-         tmp.columns = cols
-         tmp['year'] = int(year)
-         df = df.append(tmp)
+    for t in teams[int(year)]:
+        filename = os.path.join(data_dir, "{0}.html".format(t))
+        if os.path.isfile(filename):
+            tmp = get_dataframe(filename, 'per_game')
+            tmp.columns = cols
+            tmp['year'] = int(year)
+            df = df.append(tmp)
 
-   del df['MP']
-   df['Age'] = df['Age'].astype(int)
-   df['G'] = df['G'].astype(int)
-   df['GS'] = df['GS'].astype(int)
-   df['FG'] = df['FG'].astype(float)
-   df['FGA'] = df['FGA'].astype(float)
-   df['FG%'] = df['FG%'].astype(float)
-   df['3P'] = df['3P'].astype(float)
-   df['3PA'] = df['3PA'].astype(float)
-   df['3P%'] = df['3P%'].astype(float)
-   df['2P'] = df['2P'].astype(float)
-   df['2PA'] = df['2PA'].astype(float)
-   df['2P%'] = df['2P%'].astype(float)
-   df['FT'] = df['FT'].astype(float)
-   df['FTA'] = df['FTA'].astype(float)
-   df['FT%'] = df['FT%'].astype(float)
-   df['ORB'] = df['ORB'].astype(float)
-   df['DRB'] = df['DRB'].astype(float)
-   df['TRB'] = df['TRB'].astype(float)
-   df['AST'] = df['AST'].astype(float)
-   df['STL'] = df['STL'].astype(float)
-   df['BLK'] = df['BLK'].astype(float)
-   df['TOV'] = df['TOV'].astype(float)
-   df['PF'] = df['PF'].astype(float)
-   df['PTS'] = df['PTS'].astype(float)
+    del df['MP']
+    df['Age'] = df['Age'].astype(int)
+    df['G'] = df['G'].astype(int)
+    df['GS'] = df['GS'].astype(int)
+    df['FG'] = df['FG'].astype(float)
+    df['FGA'] = df['FGA'].astype(float)
+    df['FG%'] = df['FG%'].astype(float)
+    df['3P'] = df['3P'].astype(float)
+    df['3PA'] = df['3PA'].astype(float)
+    df['3P%'] = df['3P%'].astype(float)
+    df['2P'] = df['2P'].astype(float)
+    df['2PA'] = df['2PA'].astype(float)
+    df['2P%'] = df['2P%'].astype(float)
+    df['FT'] = df['FT'].astype(float)
+    df['FTA'] = df['FTA'].astype(float)
+    df['FT%'] = df['FT%'].astype(float)
+    df['ORB'] = df['ORB'].astype(float)
+    df['DRB'] = df['DRB'].astype(float)
+    df['TRB'] = df['TRB'].astype(float)
+    df['AST'] = df['AST'].astype(float)
+    df['STL'] = df['STL'].astype(float)
+    df['BLK'] = df['BLK'].astype(float)
+    df['TOV'] = df['TOV'].astype(float)
+    df['PF'] = df['PF'].astype(float)
+    df['PTS'] = df['PTS'].astype(float)
 
-   del df['ind']
+    del df['ind']
 
-   set_types = {'Age': int, 'G': int, 'GS': int, 'FG': float, 'FGA': float,
-                'FG%': float, '3P': float, '3PA': float, '3P%': float,
-                '2P': float, '2PA': float, '2P%': float, 'FT': float,
-                'FTA': float, 'FT%': float, 'ORB': float, 'DRB': float,
-                'TRB': float, 'AST': float, 'STL': float, 'BLK': float,
-                'TOV': float, 'PF': float, 'PTS': float}
+    set_types = {'Age': int, 'G': int, 'GS': int, 'FG': float, 'FGA': float,
+                 'FG%': float, '3P': float, '3PA': float, '3P%': float,
+                 '2P': float, '2PA': float, '2P%': float, 'FT': float,
+                 'FTA': float, 'FT%': float, 'ORB': float, 'DRB': float,
+                 'TRB': float, 'AST': float, 'STL': float, 'BLK': float,
+                 'TOV': float, 'PF': float, 'PTS': float}
 
-   for ii in set_types:
-      df[ii] = df[ii].astype(set_types[ii])
-      df[ii].fillna(0, inplace=True)
+    for ii in set_types:
+        df[ii] = df[ii].astype(set_types[ii])
+        df[ii].fillna(0, inplace=True)
 
-   return df
+    return df
 
 
 def get_salaries(data_dir, year):
-   df = pd.DataFrame()
+    df = pd.DataFrame()
 
-   cols = ['ind', 'Player', 'Salary']
+    cols = ['ind', 'Player', 'Salary']
 
-   for t in teams[int(year)]:
-      filename = os.path.join(data_dir, "{0}.html".format(t))
-      if os.path.isfile(filename):
-         tmp = get_dataframe(filename, 'salaries')
-         tmp.columns = cols
-         tmp['year'] = int(year)
-         df = df.append(tmp, ignore_index=True)
+    for t in teams[int(year)]:
+        filename = os.path.join(data_dir, "{0}.html".format(t))
+        if os.path.isfile(filename):
+            tmp = get_dataframe(filename, 'salaries')
+            tmp.columns = cols
+            tmp['year'] = int(year)
+            df = df.append(tmp, ignore_index=True)
 
-   df['Salary'] = df['Salary'].str.replace(r'[$,]', '').astype('float')
-   df['Salary'] = df['Salary'] / 1e6
-   df['Salary'] = np.round(df['Salary'], 3)
-   del df['ind']
+    df['Salary'] = df['Salary'].str.replace(r'[$,]', '').astype('float')
+    df['Salary'] = df['Salary'] / 1e6
+    df['Salary'] = np.round(df['Salary'], 3)
+    del df['ind']
 
-   return df
+    return df
 
 
 def get_roster(data_dir, year):
-   df = pd.DataFrame()
+    df = pd.DataFrame()
 
-   cols = ['No.', 'Player', 'Pos', 'Ht', 'Wt',
-           'Birth Date', 'Experience', 'College']
+    cols = ['No.', 'Player', 'Pos', 'Ht', 'Wt',
+            'Birth Date', 'Experience', 'College']
 
-   none_opened = True
-   for t in teams[int(year)]:
-      filename = os.path.join(data_dir, "{0}.html".format(t))
-      if os.path.isfile(filename):
-         tmp = get_dataframe(filename, 'roster')
-         tmp.columns = cols
-         tmp['year'] = year
-         df = df.append(tmp)
-         none_opened = False
+    none_opened = True
+    for t in teams[int(year)]:
+        filename = os.path.join(data_dir, "{0}.html".format(t))
+        if os.path.isfile(filename):
+            tmp = get_dataframe(filename, 'roster')
+            tmp.columns = cols
+            tmp['year'] = year
+            df = df.append(tmp)
+            none_opened = False
 
-   if none_opened:
-      print "Could not find raw data in {0}".format(data_dir)
-      sys.exit(1)
+    if none_opened:
+        print "Could not find raw data in {0}".format(data_dir)
+        sys.exit(1)
 
-   del df['No.']
+    del df['No.']
 
-   # replace positions so that only C-PF-SF-SG-PG exist
-   replacement = {"Pos": {'PF-SF': 'PF', 'PG-SG': 'PG',
-                          'SF-PF': 'SF', 'SF-SG': 'SF', '^G$': 'SG',
-                          'G-F': 'SG', 'F': 'PF', 'G-PF': 'SG', 'G': 'SG'}}
-   df.replace(to_replace=replacement, inplace=True)
+    # replace positions so that only C-PF-SF-SG-PG exist
+    replacement = {"Pos": {'PF-SF': 'PF', 'PG-SG': 'PG',
+                           'SF-PF': 'SF', 'SF-SG': 'SF', '^G$': 'SG',
+                           'G-F': 'SG', 'F': 'PF', 'G-PF': 'SG', 'G': 'SG'}}
+    df.replace(to_replace=replacement, inplace=True)
 
-   # set height to be in inches for all players
-   def heigh_to_inches(s):
-      if type(s) != type(str):  # FIXME this is dumb
-         return 0
-      t = s.split('-')
-      return int(t[0]) * 12 + int(t[1])
+    # set height to be in inches for all players
+    def heigh_to_inches(s):
+        if type(s) != type(str):  # FIXME this is dumb
+            return 0
+        t = s.split('-')
+        return int(t[0]) * 12 + int(t[1])
 
-   df['Experience'].replace('R', 0, inplace=True)
-   df['Ht'] = df['Ht'].apply(heigh_to_inches)
+    df['Experience'].replace('R', 0, inplace=True)
+    df['Ht'] = df['Ht'].apply(heigh_to_inches)
 
-   df['Wt'].fillna(0, inplace=True)
-   df['Wt'] = df['Wt'].astype(int)
+    df['Wt'].fillna(0, inplace=True)
+    df['Wt'] = df['Wt'].astype(int)
 
-   return df
+    return df
 
 
 def get_players(data_dir, year):
-   df1 = get_roster(data_dir, year)
-   df2 = get_pergame(data_dir, year)
-   df3 = get_salaries(data_dir, year)
-   df4 = get_advanced(data_dir, year)
-   del df2['year']
-   del df3['year']
-   del df4['year']
+    df1 = get_roster(data_dir, year)
+    df2 = get_pergame(data_dir, year)
+    df3 = get_salaries(data_dir, year)
+    df4 = get_advanced(data_dir, year)
+    del df2['year']
+    del df3['year']
+    del df4['year']
 
-   # FIXME -- players who get traded wind up as dupes.  here I just drop
-   # drop their first team, which isn't optimal, their stats should be
-   # averaged or something.
-   df1.drop_duplicates('Player', inplace=True, take_last=True)
-   df2.drop_duplicates('Player', inplace=True, take_last=True)
-   df3.drop_duplicates('Player', inplace=True, take_last=True)
-   df4.drop_duplicates('Player', inplace=True, take_last=True)
-   df5 = pd.merge(df1, df2, left_on="Player", right_on="Player", how="outer")
-   df6 = pd.merge(df5, df3, left_on="Player", right_on="Player", how="outer")
-   df7 = pd.merge(df6, df4, left_on="Player", right_on="Player", how="outer")
+    # FIXME -- players who get traded wind up as dupes.  here I just drop
+    # drop their first team, which isn't optimal, their stats should be
+    # averaged or something.
+    df1.drop_duplicates('Player', inplace=True, take_last=True)
+    df2.drop_duplicates('Player', inplace=True, take_last=True)
+    df3.drop_duplicates('Player', inplace=True, take_last=True)
+    df4.drop_duplicates('Player', inplace=True, take_last=True)
+    df5 = pd.merge(df1, df2, left_on="Player", right_on="Player", how="outer")
+    df6 = pd.merge(df5, df3, left_on="Player", right_on="Player", how="outer")
+    df7 = pd.merge(df6, df4, left_on="Player", right_on="Player", how="outer")
 
-   return df7
+    return df7
 
 
 def htmlToPandas(filename, name):
 
-   cols = ['Season', 'Lg', 'Team', 'W', 'L', 'W/L%', 'Finish', 'SRS', 'Pace',
-           'Rel_Pace', 'ORtg', 'Rel_ORtg', 'DRtg', 'Rel_DRtg', 'Playoffs',
-           'Coaches', 'WS']
+    cols = ['Season', 'Lg', 'Team', 'W', 'L', 'W/L%', 'Finish', 'SRS', 'Pace',
+            'Rel_Pace', 'ORtg', 'Rel_ORtg', 'DRtg', 'Rel_DRtg', 'Playoffs',
+            'Coaches', 'WS']
 
-   df = get_dataframe(filename, name)
+    df = get_dataframe(filename, name)
 
-   df.columns = cols
+    df.columns = cols
 
-   df['WS'].replace(r'\xc2\xa0',
-                    value=' ',
-                    inplace=True,
-                    regex=True)
-   df['Team'] = name
-   df['Season'].replace(r'-\d\d$',
-                        value='',
-                        inplace=True,
-                        regex=True)
-   df['Season'] = df['Season'].astype(int)
-   df['W'] = df['W'].astype(int)
-   df['L'] = df['L'].astype(int)
-   df['W/L%'] = df['W/L%'].astype(float)
-   df['Finish'] = df['Finish'].astype(float)
-   df['SRS'] = df['SRS'].astype(float)
-   df['Pace'] = df['Pace'].astype(float)
-   df['Rel_Pace'] = df['Rel_Pace'].astype(float)
-   df['ORtg'] = df['ORtg'].astype(float)
-   df['Rel_ORtg'] = df['Rel_ORtg'].astype(float)
-   df['DRtg'] = df['DRtg'].astype(float)
-   df['Rel_DRtg'] = df['Rel_DRtg'].astype(float)
+    df['WS'].replace(r'\xc2\xa0',
+                     value=' ',
+                     inplace=True,
+                     regex=True)
+    df['Team'] = name
+    df['Season'].replace(r'-\d\d$',
+                         value='',
+                         inplace=True,
+                         regex=True)
+    df['Season'] = df['Season'].astype(int)
+    df['W'] = df['W'].astype(int)
+    df['L'] = df['L'].astype(int)
+    df['W/L%'] = df['W/L%'].astype(float)
+    df['Finish'] = df['Finish'].astype(float)
+    df['SRS'] = df['SRS'].astype(float)
+    df['Pace'] = df['Pace'].astype(float)
+    df['Rel_Pace'] = df['Rel_Pace'].astype(float)
+    df['ORtg'] = df['ORtg'].astype(float)
+    df['Rel_ORtg'] = df['Rel_ORtg'].astype(float)
+    df['DRtg'] = df['DRtg'].astype(float)
+    df['Rel_DRtg'] = df['Rel_DRtg'].astype(float)
 
-   with open('tmp.html', 'w') as fd:
-      fd.write(df.to_html().encode('utf-8'))
+    with open('tmp.html', 'w') as fd:
+        fd.write(df.to_html().encode('utf-8'))
 
-   return df
+    return df
 
 
 def get_fantasy_teams(data_dir, year):

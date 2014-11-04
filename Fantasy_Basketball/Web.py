@@ -204,7 +204,7 @@ class Web(object):
                 continue
             try:
                 df = data_item['df'].groupby('Pos')
-            except:
+            except KeyError:
                 print data_item['data_type']
 
             df = df.mean()
