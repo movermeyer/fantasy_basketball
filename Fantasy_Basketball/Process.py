@@ -92,6 +92,7 @@ def get_draft(data_dir):
         d = os.path.join(data_dir, root, 'draft.html')
         tmp = get_dataframe(d, 'stats')
         tmp.columns = cols
+        tmp['draft_team'] = tmp['Tm']
         for dc in delete_cols:
             del tmp[dc]
         tmp['draft_year'] = int(year)
