@@ -335,7 +335,7 @@ def get_fantasy_teams(data_dir, year):
     team_data_file = os.path.join(processed_dir, 'team_data.pkl')
     fantasy_team_file = os.path.join(processed_dir, 'fantasy_team_data.pkl')
 
-    if os.path.isfile(team_data_file):
+    if os.path.isfile(fantasy_team_file):
 
         df = pd.read_pickle(team_data_file)
         df = df[df['Fantasy Team'] != 'FA']
