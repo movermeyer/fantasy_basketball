@@ -30,132 +30,132 @@ default_dir = os.path.expanduser("~/.fantasy_basketball")
 
 
 def download_data(data_dir, teams, drafts, league, year, league_id):
-   data_dir = os.path.join(data_dir, 'raw_data')
-   if teams:
-      download_teams(data_dir, year)
+    data_dir = os.path.join(data_dir, 'raw_data')
+    if teams:
+        download_teams(data_dir, year)
 
-   if drafts:
-      download_draft(data_dir, year)
+    if drafts:
+        download_draft(data_dir, year)
 
-   if league and league_id and (league_id is not None):
-      download_league(data_dir, league_id, year)
+    if league and league_id and (league_id is not None):
+        download_league(data_dir, league_id, year)
 
 
 def download_teams(data_dir, year):
 
-   download_teams = teams[int(year)]
+    download_teams = teams[int(year)]
 
-   for t in download_teams:
-      print "downloading {0}, {1}".format(t, year)
-      download_team(data_dir, t, year)
-      time.sleep(10.0)
+    for t in download_teams:
+        print "downloading {0}, {1}".format(t, year)
+        download_team(data_dir, t, year)
+        time.sleep(10.0)
 
 
 def download_draft(data_dir, year):
 
-   data_dir = os.path.join(data_dir, "draft", str(year))
-   mkdir_p(data_dir)
+    data_dir = os.path.join(data_dir, "draft", str(year))
+    mkdir_p(data_dir)
 
-   filename = "draft.html"
-   filename = os.path.join(data_dir, filename)
+    filename = "draft.html"
+    filename = os.path.join(data_dir, filename)
 
-   fp = open(filename, "wb")
-   curl = pycurl.Curl()
-   curl.setopt(pycurl.URL, base_draft_url.format(year=year))
-   curl.setopt(pycurl.FOLLOWLOCATION, 1)
-   curl.setopt(pycurl.MAXREDIRS, 5)
-   curl.setopt(pycurl.CONNECTTIMEOUT, 30)
-   curl.setopt(pycurl.TIMEOUT, 300)
-   curl.setopt(pycurl.NOSIGNAL, 1)
-   curl.setopt(pycurl.WRITEDATA, fp)
-   try:
-      curl.perform()
-   except pycurl.error:
-      import traceback
-      traceback.print_exc(file=sys.stderr)
-   curl.close()
-   fp.close()
+    fp = open(filename, "wb")
+    curl = pycurl.Curl()
+    curl.setopt(pycurl.URL, base_draft_url.format(year=year))
+    curl.setopt(pycurl.FOLLOWLOCATION, 1)
+    curl.setopt(pycurl.MAXREDIRS, 5)
+    curl.setopt(pycurl.CONNECTTIMEOUT, 30)
+    curl.setopt(pycurl.TIMEOUT, 300)
+    curl.setopt(pycurl.NOSIGNAL, 1)
+    curl.setopt(pycurl.WRITEDATA, fp)
+    try:
+        curl.perform()
+    except pycurl.error:
+        import traceback
+        traceback.print_exc(file=sys.stderr)
+    curl.close()
+    fp.close()
 
-   return
+    return
 
 
 def download_team(data_dir, team, year=time.strftime('%Y', time.localtime())):
 
-   data_dir = os.path.join(data_dir, "teams", str(year))
-   mkdir_p(data_dir)
+    data_dir = os.path.join(data_dir, "teams", str(year))
+    mkdir_p(data_dir)
 
-   filename = "{team}.html".format(team=team)
-   filename = os.path.join(data_dir, filename)
+    filename = "{team}.html".format(team=team)
+    filename = os.path.join(data_dir, filename)
 
-   fp = open(filename, "wb")
-   curl = pycurl.Curl()
-   curl.setopt(pycurl.URL, base_team_url.format(team=team, year=year))
-   curl.setopt(pycurl.FOLLOWLOCATION, 1)
-   curl.setopt(pycurl.MAXREDIRS, 5)
-   curl.setopt(pycurl.CONNECTTIMEOUT, 30)
-   curl.setopt(pycurl.TIMEOUT, 300)
-   curl.setopt(pycurl.NOSIGNAL, 1)
-   curl.setopt(pycurl.WRITEDATA, fp)
-   try:
-      curl.perform()
-   except pycurl.error:
-      import traceback
-      traceback.print_exc(file=sys.stderr)
-   curl.close()
-   fp.close()
+    fp = open(filename, "wb")
+    curl = pycurl.Curl()
+    curl.setopt(pycurl.URL, base_team_url.format(team=team, year=year))
+    curl.setopt(pycurl.FOLLOWLOCATION, 1)
+    curl.setopt(pycurl.MAXREDIRS, 5)
+    curl.setopt(pycurl.CONNECTTIMEOUT, 30)
+    curl.setopt(pycurl.TIMEOUT, 300)
+    curl.setopt(pycurl.NOSIGNAL, 1)
+    curl.setopt(pycurl.WRITEDATA, fp)
+    try:
+        curl.perform()
+    except pycurl.error:
+        import traceback
+        traceback.print_exc(file=sys.stderr)
+    curl.close()
+    fp.close()
 
-   return
+    return
 
 
 def download_league(data_dir, leagueID, year):
-   """
-      fetch standings and team data from espn.com
-   """
-   espn_pages = []
+    """
+       fetch standings and team data from espn.com
+    """
+    espn_pages = []
 
-   league_dir = os.path.join(data_dir, 'league', str(year))
-   mkdir_p(league_dir)
+    league_dir = os.path.join(data_dir, 'league', str(year))
+    mkdir_p(league_dir)
 
-   leagueURL = "http://games.espn.go.com/fba/leaguerosters?" +\
-               "leagueId={0}&seasonId={1}".format(leagueID, year)
-   league_filename = "league.html"
-   league_filename = os.path.join(league_dir, league_filename)
-   espn_pages.append({'url': leagueURL, 'filename': league_filename})
+    leagueURL = "http://games.espn.go.com/fba/leaguerosters?" +\
+                "leagueId={0}&seasonId={1}".format(leagueID, year)
+    league_filename = "league.html"
+    league_filename = os.path.join(league_dir, league_filename)
+    espn_pages.append({'url': leagueURL, 'filename': league_filename})
 
-   standingsURL = "http://games.espn.go.com/fba/standings?" +\
-                  "leagueId={0}&seasonId={1}".format(leagueID, year)
-   standings_filename = "standings.html"
-   standings_filename = os.path.join(league_dir, standings_filename)
-   espn_pages.append({'url': standingsURL, 'filename': standings_filename})
+    standingsURL = "http://games.espn.go.com/fba/standings?" +\
+                   "leagueId={0}&seasonId={1}".format(leagueID, year)
+    standings_filename = "standings.html"
+    standings_filename = os.path.join(league_dir, standings_filename)
+    espn_pages.append({'url': standingsURL, 'filename': standings_filename})
 
-   draft_recap_url = 'http://games.espn.go.com/fba/tools/draftrecap?' +\
-                     'leagueId={leagueID}&seasonId={year}'
-   draft_recap_url = draft_recap_url.format(leagueID=leagueID, year=year)
-   draft_recap_filename = "draft_recap.html"
-   draft_recap_filename = os.path.join(league_dir, draft_recap_filename)
-   espn_pages.append({'url': draft_recap_url,
-                      'filename': draft_recap_filename})
+    draft_recap_url = 'http://games.espn.go.com/fba/tools/draftrecap?' +\
+                      'leagueId={leagueID}&seasonId={year}'
+    draft_recap_url = draft_recap_url.format(leagueID=leagueID, year=year)
+    draft_recap_filename = "draft_recap.html"
+    draft_recap_filename = os.path.join(league_dir, draft_recap_filename)
+    espn_pages.append({'url': draft_recap_url,
+                       'filename': draft_recap_filename})
 
-   schedule_url = 'http://games.espn.go.com/fba/schedule?' +\
-                  'leagueId={leagueID}&seasonId={year}'
-   schedule_url = schedule_url.format(year=year, leagueID=leagueID)
-   schedule_filename = "schedule.html"
-   schedule_filename = os.path.join(league_dir, schedule_filename)
-   espn_pages.append({'url': schedule_url, 'filename': schedule_filename})
+    schedule_url = 'http://games.espn.go.com/fba/schedule?' +\
+                   'leagueId={leagueID}&seasonId={year}'
+    schedule_url = schedule_url.format(year=year, leagueID=leagueID)
+    schedule_filename = "schedule.html"
+    schedule_filename = os.path.join(league_dir, schedule_filename)
+    espn_pages.append({'url': schedule_url, 'filename': schedule_filename})
 
-   for page in espn_pages:
-      fd = open(page['filename'], "w")
+    for page in espn_pages:
+        fd = open(page['filename'], "w")
 
-      c = pycurl.Curl()
-      c.setopt(c.URL, page['url'])
-      c.setopt(c.WRITEDATA, fd)
+        c = pycurl.Curl()
+        c.setopt(c.URL, page['url'])
+        c.setopt(c.WRITEDATA, fd)
 
-      try:
-         c.perform()
-      except pycurl.error:
-         import traceback
-         traceback.print_exc(file=sys.stderr)
+        try:
+            c.perform()
+        except pycurl.error:
+            import traceback
+            traceback.print_exc(file=sys.stderr)
 
-      fd.close()
+        fd.close()
 
-   c.close()
+    c.close()
