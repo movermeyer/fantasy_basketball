@@ -51,8 +51,8 @@ def cli():
 @click.option('--league_id', default=None,
               help="The ESPN League ID to use downloading stats")
 def download(data_dir, teams, draft, league, year, league_id):
-   click.echo('Downloading to {0}'.format(data_dir))
-   download_data(data_dir, teams, draft, league, year, league_id)
+    click.echo('Downloading to {0}'.format(data_dir))
+    download_data(data_dir, teams, draft, league, year, league_id)
 
 
 @cli.command()
@@ -74,7 +74,6 @@ def process(data_dir, teams, league, year):
         get_player_stats(data_dir, year)
 
     get_fantasy_teams(data_dir, year)
-
 
 
 @cli.command()
@@ -124,6 +123,7 @@ def serve(data_dir, port):
         pass
 
     os.chdir(orig_dir)
+
 
 def main():
     cli()
