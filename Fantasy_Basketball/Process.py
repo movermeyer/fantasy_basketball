@@ -30,75 +30,75 @@ from TeamData import teams
 
 
 def get_player_stats(data_dir, year):
-   d = os.path.join(data_dir, 'raw_data', 'teams', str(year))
-   pkl = os.path.join(data_dir, 'processed_data', str(year))
-   draft_dir = os.path.join(data_dir, 'raw_data', 'draft')
+    d = os.path.join(data_dir, 'raw_data', 'teams', str(year))
+    pkl = os.path.join(data_dir, 'processed_data', str(year))
+    draft_dir = os.path.join(data_dir, 'raw_data', 'draft')
 
-   df = get_players(d, year)
-   if os.path.isdir(draft_dir):
-      draft_df = get_draft(draft_dir)
-      df = augment_draft_data(df, draft_df)
+    df = get_players(d, year)
+    if os.path.isdir(draft_dir):
+        draft_df = get_draft(draft_dir)
+        df = augment_draft_data(df, draft_df)
 
-   df = augment_fantasy_teams(df, data_dir)
-   df = augment_minutes(df)
-   df = augment_value(df)
-   df = augment_price(df)
+    df = augment_fantasy_teams(df, data_dir)
+    df = augment_minutes(df)
+    df = augment_value(df)
+    df = augment_price(df)
 
-   mkdir_p(pkl)
-   pkl = os.path.join(pkl, 'team_data.pkl')
-   df.to_pickle(pkl)
+    mkdir_p(pkl)
+    pkl = os.path.join(pkl, 'team_data.pkl')
+    df.to_pickle(pkl)
 
 
 def get_dataframe(filename, table_id):
-   if not os.path.isfile(filename):
-      print "Cannot open file, try downloading data\n{0}".format(filename)
-      sys.exit(1)
+    if not os.path.isfile(filename):
+        print "Cannot open file, try downloading data\n{0}".format(filename)
+        sys.exit(1)
 
-   with open(filename, 'r') as fd:
-      soup = BeautifulSoup(fd.read())
+    with open(filename, 'r') as fd:
+        soup = BeautifulSoup(fd.read())
 
-   try:
-      table = soup.find('table', {'id': table_id})
-      body = table.find('tbody')
-      rows = body.find_all('tr', {'class': ''})
-   except AttributeError:
-      print "Parsing {0} failed".format(filename)
-      return pd.DataFrame()
+    try:
+        table = soup.find('table', {'id': table_id})
+        body = table.find('tbody')
+        rows = body.find_all('tr', {'class': ''})
+    except AttributeError:
+        print "Parsing {0} failed".format(filename)
+        return pd.DataFrame()
 
-   rows = [str(r.encode('utf-8')) for r in rows if r['class'] == ['']]
+    rows = [str(r.encode('utf-8')) for r in rows if r['class'] == ['']]
 
-   html = '<table>' + ''.join(rows) + '</table>'
+    html = '<table>' + ''.join(rows) + '</table>'
 
-   df = pd.io.html.read_html(html, infer_types=False)[0]
+    df = pd.io.html.read_html(html, infer_types=False)[0]
 
-   return df
+    return df
 
 
 def get_draft(data_dir):
 
-   df = pd.DataFrame()
-   cols = ['Rk', 'Pk', 'Tm', 'Player', 'College', 'G', 'MP', 'PTS', 'TRB',
-           'AST', 'FG%', '3P%', 'FT%', 'MP_PG', 'PTS_PG', 'TRB_PG',
-           'AST_PG', 'WS', 'WS/48']
-   delete_cols = ['Rk', 'Tm', 'College', 'G', 'MP', 'PTS', 'TRB', 'AST',
-                  'FG%', '3P%', 'FT%', 'MP_PG', 'PTS_PG', 'TRB_PG', 'AST_PG',
-                  'WS', 'WS/48']
+    df = pd.DataFrame()
+    cols = ['Rk', 'Pk', 'Tm', 'Player', 'College', 'G', 'MP', 'PTS', 'TRB',
+            'AST', 'FG%', '3P%', 'FT%', 'MP_PG', 'PTS_PG', 'TRB_PG',
+            'AST_PG', 'WS', 'WS/48']
+    delete_cols = ['Rk', 'Tm', 'College', 'G', 'MP', 'PTS', 'TRB', 'AST',
+                   'FG%', '3P%', 'FT%', 'MP_PG', 'PTS_PG', 'TRB_PG', 'AST_PG',
+                   'WS', 'WS/48']
 
-   for root, _, _ in os.walk(data_dir, topdown=False):
-      try:
-         year = re.search(r'[0-9]{4}', root).group(0)
-      except AttributeError:
-         continue
-      d = os.path.join(data_dir, root, 'draft.html')
-      tmp = get_dataframe(d, 'stats')
-      tmp.columns = cols
-      for dc in delete_cols:
-         del tmp[dc]
-      tmp['draft_year'] = int(year)
-      tmp['Pk'] = tmp['Pk'].astype(int)
-      df = df.append(tmp)
+    for root, _, _ in os.walk(data_dir, topdown=False):
+        try:
+            year = re.search(r'[0-9]{4}', root).group(0)
+        except AttributeError:
+            continue
+        d = os.path.join(data_dir, root, 'draft.html')
+        tmp = get_dataframe(d, 'stats')
+        tmp.columns = cols
+        for dc in delete_cols:
+            del tmp[dc]
+        tmp['draft_year'] = int(year)
+        tmp['Pk'] = tmp['Pk'].astype(int)
+        df = df.append(tmp)
 
-   return df
+    return df
 
 
 def get_advanced(data_dir, year):
@@ -186,7 +186,6 @@ def get_pergame(data_dir, year):
    df['TOV'] = df['TOV'].astype(float)
    df['PF'] = df['PF'].astype(float)
    df['PTS'] = df['PTS'].astype(float)
-
 
    del df['ind']
 
@@ -329,29 +328,30 @@ def htmlToPandas(filename, name):
 
    return df
 
+
 def get_fantasy_teams(data_dir, year):
-   processed_dir = os.path.join(data_dir, 'processed_data', str(year))
-   team_data_file = os.path.join(processed_dir, 'team_data.pkl')
-   fantasy_team_file = os.path.join(processed_dir, 'fantasy_team_data.pkl')
+    processed_dir = os.path.join(data_dir, 'processed_data', str(year))
+    team_data_file = os.path.join(processed_dir, 'team_data.pkl')
+    fantasy_team_file = os.path.join(processed_dir, 'fantasy_team_data.pkl')
 
-   if os.path.isfile(team_data_file):
+    if os.path.isfile(team_data_file):
 
-      df = pd.read_pickle(team_data_file)
-      df = df[df['Fantasy Team'] != 'FA']
+        df = pd.read_pickle(team_data_file)
+        df = df[df['Fantasy Team'] != 'FA']
 
-      grouped = df.groupby('Fantasy Team')
-      grouped = grouped.mean()
-      grouped['Fantasy Team'] = grouped.index
-      grouped.index = range(grouped.shape[0])
+        grouped = df.groupby('Fantasy Team')
+        grouped = grouped.mean()
+        grouped['Fantasy Team'] = grouped.index
+        grouped.index = range(grouped.shape[0])
 
-      cols_to_round = {'Age': 2, 'G': 2, 'GS': 2, 'MP': 2, 'FG%': 3, 'FT%': 3,
-                       '3P': 2, 'TRB': 2, 'AST': 2, 'STL': 2, 'BLK': 2,
-                       'PTS': 2, 'Salary': 3, 'value': 2, 'price': 2,
-                       'PER': 3, 'WS': 3}
+        cols_to_round = {'Age': 2, 'G': 2, 'GS': 2, 'MP': 2, 'FG%': 3,
+                         'FT%': 3, '3P': 2, 'TRB': 2, 'AST': 2, 'STL': 2,
+                         'BLK': 2, 'PTS': 2, 'Salary': 3, 'value': 2,
+                         'price': 2, 'PER': 3, 'WS': 3}
 
-      for ii in cols_to_round:
-         grouped[ii] = np.round(grouped[ii], cols_to_round[ii])
+        for ii in cols_to_round:
+            grouped[ii] = np.round(grouped[ii], cols_to_round[ii])
 
-      grouped.to_pickle(fantasy_team_file)
+        grouped.to_pickle(fantasy_team_file)
 
-   return
+    return
