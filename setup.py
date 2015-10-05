@@ -23,7 +23,7 @@ from setuptools import setup, find_packages
 
 
 def read(fname):
-   return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
 setup(name="Fantasy_Basketball",
@@ -33,8 +33,8 @@ setup(name="Fantasy_Basketball",
       description=("A package that fetches, processes and visualizes " +
                    "fantasy basketball statistics"),
       license="GPL3",
-      keywords = "fantasy basketball pandas",
-      url = "https://github.com/dwwkelly/fantasy_basketball",
+      keywords="fantasy basketball pandas",
+      url="https://github.com/dwwkelly/fantasy_basketball",
       test_suite="tests",
       scripts=['scripts/FB_Manager.py'],
       long_description=read('README.rst'),
@@ -46,6 +46,6 @@ setup(name="Fantasy_Basketball",
                                            'static/*tff',
                                            'static/js/*']},
       install_requires=['Click', 'numpy', 'matplotlib',
-                        'pandas', 'jinja2', 'pycurl',
+                        'pandas', 'jinja2', 'requests',
                         'beautifulsoup4', 'lxml'],
       )

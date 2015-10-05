@@ -38,7 +38,7 @@ Dependencies
 * `matplotlib <matplotlib.org>`_
 * `pandas <http://pandas.pydata.org/>`_
 * `jinja2 <http://jinja.pocoo.org/>`_
-* `pycurl <http://pycurl.sourceforge.net/>`_
+* `requests <https://pypi.python.org/pypi/requests>`_`
 * `beautifulsoup4 <http://www.crummy.com/software/BeautifulSoup/>`_
  
 Usage

@@ -13,9 +13,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-__author__ = "Devin Kelly"
 
-import pycurl
+import requests
 import time
 import sys
 import os
@@ -23,6 +22,8 @@ import os
 from TeamData import teams
 
 from Util import mkdir_p
+
+__author__ = "Devin Kelly"
 
 base_draft_url = "http://www.basketball-reference.com/draft/NBA_{year}.html"
 base_team_url = "http://www.basketball-reference.com/teams/{team}/{year}.html"
@@ -58,23 +59,15 @@ def download_draft(data_dir, year):
 
     filename = "draft.html"
     filename = os.path.join(data_dir, filename)
+    url = base_draft_url.format(year=year)
 
-    fp = open(filename, "wb")
-    curl = pycurl.Curl()
-    curl.setopt(pycurl.URL, base_draft_url.format(year=year))
-    curl.setopt(pycurl.FOLLOWLOCATION, 1)
-    curl.setopt(pycurl.MAXREDIRS, 5)
-    curl.setopt(pycurl.CONNECTTIMEOUT, 30)
-    curl.setopt(pycurl.TIMEOUT, 300)
-    curl.setopt(pycurl.NOSIGNAL, 1)
-    curl.setopt(pycurl.WRITEDATA, fp)
-    try:
-        curl.perform()
-    except pycurl.error:
-        import traceback
-        traceback.print_exc(file=sys.stderr)
-    curl.close()
-    fp.close()
+    with open(filename, "wb") as fd:
+
+        r = requests.get(url)
+        if r.status_code == 200:
+            fd.write(r.text)
+        else:
+            print 'Download {0} failed'.format(url)
 
     return
 
@@ -86,23 +79,16 @@ def download_team(data_dir, team, year=time.strftime('%Y', time.localtime())):
 
     filename = "{team}.html".format(team=team)
     filename = os.path.join(data_dir, filename)
+    url = base_team_url.format(team=team, year=year)
 
-    fp = open(filename, "wb")
-    curl = pycurl.Curl()
-    curl.setopt(pycurl.URL, base_team_url.format(team=team, year=year))
-    curl.setopt(pycurl.FOLLOWLOCATION, 1)
-    curl.setopt(pycurl.MAXREDIRS, 5)
-    curl.setopt(pycurl.CONNECTTIMEOUT, 30)
-    curl.setopt(pycurl.TIMEOUT, 300)
-    curl.setopt(pycurl.NOSIGNAL, 1)
-    curl.setopt(pycurl.WRITEDATA, fp)
-    try:
-        curl.perform()
-    except pycurl.error:
-        import traceback
-        traceback.print_exc(file=sys.stderr)
-    curl.close()
-    fp.close()
+    with open(filename, 'wb') as fd:
+        r = requests.get(url)
+        if r.status_code == 200:
+            fd.write(r.text)
+        else:
+            print 'Downloading {0} failed'.format(url)
+
+    return
 
     return
 
