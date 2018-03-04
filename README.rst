@@ -1,7 +1,7 @@
 fantasy_basketball
 ==================
 
-.. image:: https://pypip.in/v/Fantasy_Basketball/badge.png
+.. image:: https://img.shields.io/pypi/v/Fantasy_Basketball.svg
    :target: https://pypi.python.org/pypi/Fantasy_Basketball
    :alt: Latest Version
 
